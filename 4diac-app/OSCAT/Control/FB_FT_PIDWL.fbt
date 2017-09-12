@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Composite Function Block Type" Name="FB_FT_PIDWL">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2013-10-19" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="IN"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+        <With Var="LIM_H"/>
+        <With Var="LIM_L"/>
+        <With Var="TV"/>
+        <With Var="TN"/>
+        <With Var="KP"/>
+      </Event>
+      <Event Name="RST" Type="Event">
+        <With Var="IN"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="Y"/>
+        <With Var="LIM"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="Y"/>
+        <With Var="LIM"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input event qualifier" Name="IN" Type="REAL"/>
+      <VarDeclaration InitialValue="1.0" Name="KP" Type="REAL"/>
+      <VarDeclaration InitialValue="1.0" Name="TN" Type="REAL"/>
+      <VarDeclaration InitialValue="1.0" Name="TV" Type="REAL"/>
+      <VarDeclaration InitialValue="-1.0E38" Name="LIM_L" Type="REAL"/>
+      <VarDeclaration InitialValue="1.0E38" Name="LIM_H" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output event qualifier" Name="Y" Type="REAL"/>
+      <VarDeclaration Name="LIM" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Name="FB_FT_PIWL" Type="FB_FT_PIWL" x="2375.0" y="665.0">
+      <Parameter Name="KP" Value="1.0"/>
+    </FB>
+    <FB Name="FB_FT_DERIV" Type="FB_FT_DERIV" x="3800.0" y="1520.0"/>
+    <FB Name="F_ADD" Type="F_ADD" x="4750.0" y="475.0"/>
+    <FB Name="F_MUL" Type="F_MUL" x="3135.0" y="1425.0"/>
+    <FB Name="F_MUL_0" Type="F_MUL" x="950.0" y="380.0"/>
+    <FB Name="F_DIV" Type="F_DIV" x="1615.0" y="950.0">
+      <Parameter Name="IN1" Value="REAL#1.0"/>
+    </FB>
+    <FB Name="F_FT_LIMIT" Type="F_FT_LIMIT" x="5415.0" y="1710.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="FB_FT_PIWL.LIM_L" Source="LIM_L" dx1="160.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.LIM_H" Source="LIM_H" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_ADD.IN1" Source="FB_FT_DERIV.out" dx1="275.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_ADD.IN2" Source="FB_FT_PIWL.Y" dx1="1080.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_DERIV.K" Source="F_MUL.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_DERIV.in" Source="IN" dx1="500.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL.IN1" Source="KP" dx1="405.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL.IN2" Source="TV" dx1="235.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.IN" Source="F_MUL_0.OUT" dx1="745.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL_0.IN1" Source="IN" dx1="505.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL_0.IN2" Source="KP" dx1="410.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.KI" Source="F_DIV.OUT" dx1="175.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_DIV.IN2" Source="TN" dx1="325.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="Y" Source="F_FT_LIMIT.OUT" dx1="265.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_FT_LIMIT.VAL" Source="F_ADD.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="LIM" Source="F_FT_LIMIT.LIM" dx1="425.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_FT_LIMIT.LIM_L" Source="LIM_L" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_FT_LIMIT.LIM_H" Source="LIM_H" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="FB_FT_PIWL.INIT" Source="INIT" dx1="2015.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_DERIV.INIT" Source="FB_FT_PIWL.INITO" dx1="795.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="FB_FT_DERIV.INITO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_DERIV.run" Source="F_MUL.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL.REQ" Source="FB_FT_PIWL.CNF" dx1="-25.0" dx2="0.0" dy="445.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.RST" Source="RST" dx1="1935.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL_0.REQ" Source="REQ" dx1="730.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_DIV.REQ" Source="F_MUL_0.CNF" dx1="0.0" dx2="0.0" dy="55.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.REQ" Source="F_DIV.CNF" dx1="250.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_ADD.REQ" Source="FB_FT_DERIV.CNF" dx1="190.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_FT_LIMIT.REQ" Source="F_ADD.CNF" dx1="160.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CNF" Source="F_FT_LIMIT.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

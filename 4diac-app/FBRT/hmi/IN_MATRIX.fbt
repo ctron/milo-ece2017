@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_MATRIX" Comment="MATRIX input from table" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2004-06-22" />
+  <CompilerInfo header="package fb.rt.swing;" classdef="public class IN_MATRIX extends FB_TABLE" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version="1.4.2" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialize matrix to IN" >
+        <With Var="QI" />
+        <With Var="ROWS" />
+        <With Var="COLS" />
+        <With Var="IVAL" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" Comment="Indication of user input from table" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="1=Enabled,0=Inhibited" />
+      <VarDeclaration Name="ROWS" Type="UINT" InitialValue="1" Comment="Number of rows in the table" />
+      <VarDeclaration Name="COLS" Type="UINT" InitialValue="1" Comment="Number of columns in the table" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" Comment="Initial data values, e.g., &#34;[1,2,3,4]&#34;" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="0=OK,1=Inhibited" />
+      <VarDeclaration Name="STATUS" Type="UINT" Comment="0=OK,2=TYPE_CONVERSION_ERROR,4=INHIBITED,13=ARRAY_SIZE_ERROR" />
+      <VarDeclaration Name="OUT" Type="ANY" Comment="Output data from table(implementation-dependent)" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd" >
+<FBType Name="E_DELAY" Comment="Delayed propagation of an event-Cancellable" >
+  <Identification Standard="61499-1" Classification="Event processing" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-04-05" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1997-12-09" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="START" Comment="Begin Delay" >
+        <With Var="DT" />
+      </Event>
+      <Event Name="STOP" Comment="Cancel Delay" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Delayed Event" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="DT" Type="TIME" Comment="Delay Time" />
+    </InputVars>
+  </InterfaceList>
+  <Service RightInterface="RESOURCE" LeftInterface="E_DELAY" >
+    <ServiceSequence Name="event_delay" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT" />
+        <OutputPrimitive Interface="E_DELAY" Event="EO" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="delay_canceled" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_DELAY" Event="STOP" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="no_multiple_delay" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="E_DELAY" Event="EO" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

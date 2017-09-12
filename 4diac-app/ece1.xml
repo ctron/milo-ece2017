@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<libraryElement:AutomationSystem xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:libraryElement="org.fordiac.ide.model.libraryElement" name="ece1" id="_6vHA0JrhEeayc6lpp50TQw">
+  <versionInfo author="Author" organization="4DIAC-Consortium" version="1.0"/>
+  <application comment="" name="app1">
+    <fBNetwork href="app1.xml#//@fbNetwork"/>
+  </application>
+  <application comment="" name="app2">
+    <fBNetwork href="app2.xml#//@fbNetwork"/>
+  </application>
+  <systemConfiguration>
+    <systemConfigurationNetwork href="SysConf.xml#//@systemConfigNetwork"/>
+  </systemConfiguration>
+</libraryElement:AutomationSystem>

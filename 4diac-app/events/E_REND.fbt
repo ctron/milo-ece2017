@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_REND" Comment="Rendezvous of two events" >
+  <Identification Standard="61499-1-A" Classification="Event Processing" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-09-18" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1996-11-22" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="EI1" Comment="First Event Input" >
+      </Event>
+      <Event Name="EI2" Comment="Second Event Input" >
+      </Event>
+      <Event Name="R" Comment="Reset Event" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Rendezvous Output Event" >
+      </Event>
+    </EventOutputs>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="START" Comment="Initial State" x="1276.4706" y="794.1176" >
+      </ECState>
+      <ECState Name="R" Comment="Do nothing if R arrives when not awaiting rendezvous" x="1276.4706" y="52.9412" >
+      </ECState>
+      <ECState Name="R1" Comment="Do nothing if EI1 arrives again while awaiting EI2" x="2376.4705" y="400" >
+      </ECState>
+      <ECState Name="EI1" Comment="EI1 has arrived,wait for EI2 or R" x="2376.4705" y="1188.2352" >
+      </ECState>
+      <ECState Name="EO" Comment="Issue rendezvous event" x="1276.4706" y="1529.4117" >
+        <ECAction Output="EO" />
+      </ECState>
+      <ECState Name="EI2" Comment="EI2 has arrived,wait for EI1 or R" x="176.4706" y="1188.2352" >
+      </ECState>
+      <ECState Name="R2" Comment="Do nothing if EI2 arrives again while awaiting EI1" x="176.4706" y="400" >
+      </ECState>
+      <ECTransition Source="START" Destination="R" Condition="R" x="1276.4706" y="300" />
+      <ECTransition Source="R" Destination="START" Condition="1" x="1494.1177" y="488.2353" />
+      <ECTransition Source="START" Destination="EI1" Condition="EI1" x="1635.2941" y="1052.9412" />
+      <ECTransition Source="EI1" Destination="START" Condition="R" x="1729.4117" y="794.1176" />
+      <ECTransition Source="START" Destination="EI2" Condition="EI2" x="558.8235" y="1188.2352" />
+      <ECTransition Source="EI2" Destination="START" Condition="R" x="658.8235" y="794.1176" />
+      <ECTransition Source="EI1" Destination="R1" Condition="EI1" x="2376.4705" y="670.5882" />
+      <ECTransition Source="R1" Destination="EI1" Condition="1" x="2158.8235" y="782.3529" />
+      <ECTransition Source="EI2" Destination="R2" Condition="EI2" x="176.4706" y="800" />
+      <ECTransition Source="R2" Destination="EI2" Condition="1" x="347.0588" y="788.2353" />
+      <ECTransition Source="EI1" Destination="EO" Condition="EI2" x="1617.647" y="1294.1177" />
+      <ECTransition Source="EI2" Destination="EO" Condition="EI1" x="176.4706" y="1529.4117" />
+      <ECTransition Source="EO" Destination="START" Condition="1" x="1276.4706" y="1041.1764" />
+    </ECC>
+  </BasicFB>
+</FBType>

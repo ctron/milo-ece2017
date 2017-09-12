@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="OUT_COLOR" Comment="COLOR Output" >
+  <Identification Standard="61499-1" Classification="HMI" Function="COLOR output" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-04-14" Remarks="First XML version." />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="LABEL" />
+        <With Var="IN" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Input event qualifier" />
+      <VarDeclaration Name="LABEL" Type="WSTRING" Comment="Output label" />
+      <VarDeclaration Name="IN" Type="COLOR" Comment="Output value" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="Canvas" LeftInterface="OUT_COLOR" >
+    <ServiceSequence Name="normal_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_COLOR" Event="INIT+" Parameters="DIA,IN" />
+        <OutputPrimitive Interface="Canvas" Event="drawOval" />
+        <OutputPrimitive Interface="OUT_COLOR" Event="INITO+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="initialization_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_COLOR" Event="INIT-" />
+        <OutputPrimitive Interface="OUT_COLOR" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="normal_data_transfer" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_COLOR" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="Canvas" Event="drawOval" Parameters="IN" />
+        <OutputPrimitive Interface="OUT_COLOR" Event="CNF+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="upstream_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_COLOR" Event="REQ-" />
+        <OutputPrimitive Interface="OUT_COLOR" Event="CNF-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

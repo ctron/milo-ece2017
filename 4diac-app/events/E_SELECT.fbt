@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_SELECT" Comment="Selection between two events" >
+  <Identification Standard="61499-1" Classification="Event processing" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-01-28" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1997-12-05" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="EI0" Comment="Input event,selected when G=0" >
+        <With Var="G" />
+      </Event>
+      <Event Name="EI1" Comment="Input event,selected when G=1" >
+        <With Var="G" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Output Event" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="G" Type="BOOL" Comment="Select EI0 when G=0,EI1 when G=1" />
+    </InputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="START" Comment="Initial State" x="1276.4706" y="794.1176" >
+      </ECState>
+      <ECState Name="EO" Comment="Issue Output Event" x="1276.4706" y="317.6471" >
+        <ECAction Output="EO" />
+      </ECState>
+      <ECState Name="EI0" Comment="EI0 arrived" x="1805.8823" y="794.1176" >
+      </ECState>
+      <ECState Name="EI1" Comment="EI1 arrived" x="611.7647" y="794.1176" >
+      </ECState>
+      <ECTransition Source="START" Destination="EI0" Condition="EI0" x="1582.3529" y="1000" />
+      <ECTransition Source="START" Destination="EI1" Condition="EI1" x="900" y="1000" />
+      <ECTransition Source="EI0" Destination="EO" Condition="NOT G" x="1594.1177" y="605.8823" />
+      <ECTransition Source="EI0" Destination="START" Condition="G" x="1635.2941" y="794.1176" />
+      <ECTransition Source="EI1" Destination="EO" Condition="G" x="923.5294" y="570.5882" />
+      <ECTransition Source="EI1" Destination="START" Condition="NOT G" x="888.2353" y="794.1176" />
+      <ECTransition Source="EO" Destination="START" Condition="1" x="1276.4706" y="535.2941" />
+    </ECC>
+  </BasicFB>
+</FBType>

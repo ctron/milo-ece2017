@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DataType SYSTEM "http://www.holobloc.com/xml/DataType.dtd" >
+<DataType Name="TestStruct" Comment="A Structured Data Type" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="4DIAC" Version="0.9" Author="IH" Date="2012-01-10" />
+  <CompilerInfo header="package fb.rt.test;" >
+  </CompilerInfo>
+  <ASN1Tag Class="APPLICATION" Number="1" />
+  <StructuredType >
+    <VarDeclaration Name="FOO" Type="BOOL" />
+    <VarDeclaration Name="BAR" Type="INT" />
+  </StructuredType>
+</DataType>

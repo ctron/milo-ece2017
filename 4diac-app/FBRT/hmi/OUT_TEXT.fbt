@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="OUT_TEXT" Comment="WSTRING Output to a TextArea" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Unknown" Version="0.0" Author="Unknown" Date="2004-06-20" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" >
+        <With Var="QI" />
+        <With Var="IVAL" />
+        <With Var="SIZE" />
+      </Event>
+      <Event Name="REQ" Comment="Append IN to the TextArea" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="CNF" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" />
+      <VarDeclaration Name="SIZE" Type="UINT" ArraySize="2" InitialValue="[10,20]" Comment="Rows,Columns" />
+      <VarDeclaration Name="IN" Type="WSTRING" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="TextArea" LeftInterface="OUT_TEXT" >
+    <ServiceSequence Name="normal_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_TEXT" Event="INIT+" Parameters="IVAL" />
+        <OutputPrimitive Interface="TextArea" Event="initialize" Parameters="IVAL" />
+        <OutputPrimitive Interface="OUT_TEXT" Event="INITO+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="initialization_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_TEXT" Event="INIT-" />
+        <OutputPrimitive Interface="OUT_TEXT" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="data_request" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_TEXT" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="TextArea" Event="append" />
+        <OutputPrimitive Interface="OUT_TEXT" Event="CNF+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="not_initialized" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_TEXT" Event="REQ+" />
+        <OutputPrimitive Interface="OUT_TEXT" Event="CNF-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="clear" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_TEXT" Event="REQ-" />
+        <OutputPrimitive Interface="TextArea" Event="clear" />
+        <OutputPrimitive Interface="OUT_TEXT" Event="CNF-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

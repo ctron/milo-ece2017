@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="OUT_ARRAY" Comment="ARRAY Output to TextField" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.3" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2001-06-01" Remarks="Added W input to subclass from OUT_ANY." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-05-27" Remarks="XML version with N,TYPE inputs" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-12-30" Remarks="Original SRC version" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="W" />
+        <With Var="N" />
+        <With Var="TYPE" />
+        <With Var="IVAL" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Input event qualifier" />
+      <VarDeclaration Name="IN" Type="ARRAY" Comment="Output value" />
+      <VarDeclaration Name="W" Type="UINT" InitialValue="20" Comment="TextField width in chars" />
+      <VarDeclaration Name="N" Type="UINT" Comment="Number of array elements" />
+      <VarDeclaration Name="TYPE" Type="WSTRING" Comment="Array element type" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" Comment="Initial contents" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

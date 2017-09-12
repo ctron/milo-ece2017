@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd" >
+<FBType Name="E_SPLIT" Comment="Split an event" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-10-17" />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="EI" Comment="Input event" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO1" Comment="First output event" >
+      </Event>
+      <Event Name="EO2" Comment="Second output event,etc." >
+      </Event>
+    </EventOutputs>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="START" Comment="Initial State" >
+      </ECState>
+      <ECState Name="EO" Comment="Output first,second event,etc." >
+        <ECAction Output="EO1" />
+        <ECAction Output="EO2" />
+      </ECState>
+      <ECTransition Source="START" Destination="EO" Condition="EI" />
+      <ECTransition Source="EO" Destination="START" Condition="1" />
+    </ECC>
+  </BasicFB>
+</FBType>

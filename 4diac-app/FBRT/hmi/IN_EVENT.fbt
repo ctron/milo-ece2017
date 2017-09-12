@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_EVENT" Comment="Event-issuing push button" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-03-04" Remarks="Updated documentation." />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*; import java.awt.event.*;" classdef="public class IN_EVENT extends FBInstance implements ActionListener" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="QI" />
+        <With Var="LABEL" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="IND" Comment="Event Indication" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" />
+      <VarDeclaration Name="LABEL" Type="WSTRING" Comment="Label" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="Button" LeftInterface="FB_BUTTON" >
+    <ServiceSequence Name="normal_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_BUTTON" Event="INIT+" Parameters="LABEL" />
+        <OutputPrimitive Interface="Button" Event="setLabel" Parameters="LABEL" />
+        <OutputPrimitive Interface="FB_BUTTON" Event="INITO+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="normal_termination" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_BUTTON" Event="INIT-" />
+        <OutputPrimitive Interface="FB_BUTTON" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="normal_operation" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="Button" Event="actionPerformed" Parameters="QI=1" />
+        <OutputPrimitive Interface="FB_BUTTON" Event="IND+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="operation_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="Button" Event="actionPerformed" Parameters="QI=0" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

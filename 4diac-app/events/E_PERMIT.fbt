@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Permissive propagation of an event" Name="E_PERMIT">
+  <Identification Standard="61499-1-A.1"/>
+    <VersionInfo Author="IH" Date="2012-12-20" Organization="TU Wien" Remarks="added service sequences for test case specification" Version="0.2"/>
+  <VersionInfo Author="JHC" Date="2003-12-30" Organization="Rockwell Automation" Remarks="Updated for 61499-1 CDV." Version="0.1"/>
+  <VersionInfo Author="JHC" Date="2001-03-03" Organization="Rockwell Automation" Version="0.0"/>
+  <CompilerInfo header="package fb.rt.events;">
+    <Compiler Language="Java" Product="VisualAge" Vendor="IBM" Version="3.0"/>
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Event input" Name="EI" Type="Event">
+        <With Var="PERMIT"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Event output" Name="EO" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="PERMIT" Type="BOOL"/>
+    </InputVars>
+    <OutputVars/>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="630.0" y="430.0"/>
+      <ECState Comment="Issue EO Event" Name="EO" x="1075.0" y="70.0">
+        <ECAction Output="EO"/>
+      </ECState>
+      <ECState Comment="Do nothing if PERMIT=FALSE" Name="NULL" x="155.0" y="710.0"/>
+      <ECTransition Comment="" Condition="EI&amp;PERMIT" Destination="EO" Source="START" x="1075.0" y="430.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="EO" x="630.0" y="70.0"/>
+      <ECTransition Comment="" Condition="EI&amp;(NOT PERMIT)" Destination="NULL" Source="START" x="630.0" y="710.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="NULL" x="155.0" y="430.0"/>
+    </ECC>
+  </BasicFB>
+  <Service Comment="Permissive propagation of an event" LeftInterface="FB Interface" RightInterface="Runtime Environment">
+    <ServiceSequence Name="EventTerminationTest">
+      <ServiceTransaction>
+        <InputPrimitive Event="EI" Interface="FB Interface" Parameters="PERMIT:=FALSE;"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="EventPropagationTest">
+      <ServiceTransaction>
+        <InputPrimitive Event="EI" Interface="FB Interface" Parameters="PERMIT:=TRUE;"/>
+        <OutputPrimitive Event="EO" Interface="FB Interface" Parameters=""/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="Negative Test">
+      <ServiceTransaction>
+        <InputPrimitive Event="EI" Interface="FB Interface" Parameters="PERMIT:=true;"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="E_MUX_2">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2008-07-10" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Mux in event" Name="EI1" Type="Event"/>
+      <Event Comment="Mux in event" Name="EI2" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Mux output event" Name="EO" Type="Event">
+        <With Var="K"/>
+      </Event>
+    </EventOutputs>
+    <InputVars/>
+    <OutputVars>
+      <VarDeclaration Comment="Mux event index" Name="K" Type="UINT"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Service Interface Function Block Type" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+</FBType>

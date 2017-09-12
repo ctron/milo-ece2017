@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_COLOR" Comment="COLOR input from drop-down list" >
+  <Identification Standard="61499-1" ApplicationDomain="GUI" Function="COLOR input" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-03-04" Remarks="Updated documentation." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-12-29" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*; import java.awt.event.*;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" Comment="User Entered Data or REQ was processed" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="1=Read or Init data;0=Inhibit" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="1=OK,0=Error" />
+      <VarDeclaration Name="OUT" Type="COLOR" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="Choice" LeftInterface="IN_COLOR" >
+    <ServiceSequence Name="normal_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_COLOR" Event="INIT+" />
+        <OutputPrimitive Interface="Choice" Event="initialize" />
+        <OutputPrimitive Interface="IN_COLOR" Event="INITO+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="normal_termination" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_COLOR" Event="INIT-" />
+        <OutputPrimitive Interface="IN_COLOR" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="normal_operation" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="Choice" Event="itemStateChanged" />
+        <OutputPrimitive Interface="IN_COLOR" Event="IND+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="operation_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="Choice" Event="itemStateChanged" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

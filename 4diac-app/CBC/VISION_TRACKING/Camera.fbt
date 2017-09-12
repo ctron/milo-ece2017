@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="Camera">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2012-05-26" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="track_update and returns all information" Name="REQ" Type="Event">
+        <With Var="QI"/>
+        <With Var="CH"/>
+        <With Var="I_BLOB"/>
+        <With Var="INFO"/>
+      </Event>
+      <Event Name="BOX" Type="Event">
+        <With Var="I_BLOB"/>
+        <With Var="CH"/>
+        <With Var="QI"/>
+        <With Var="INFO"/>
+      </Event>
+      <Event Name="ECLIPSE" Type="Event">
+        <With Var="QI"/>
+        <With Var="CH"/>
+        <With Var="I_BLOB"/>
+        <With Var="INFO"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="CENTRIOD Confirmation of Requested Service" Name="CNF" Type="Event">
+        <With Var="QO"/>
+        <With Var="COUNT"/>
+        <With Var="SIZE"/>
+        <With Var="FRAME"/>
+        <With Var="CENTRIOD_POS"/>
+        <With Var="CONFIDENCE"/>
+        <With Var="BLOB_WL"/>
+      </Event>
+      <Event Name="BOXO" Type="Event">
+        <With Var="CONFIDENCE"/>
+        <With Var="BLOB_WL"/>
+        <With Var="QO"/>
+        <With Var="BOX_POS"/>
+      </Event>
+      <Event Name="ECLIPSEO" Type="Event">
+        <With Var="ECLIPSE_POS"/>
+        <With Var="CONFIDENCE"/>
+        <With Var="FRAME"/>
+        <With Var="SIZE"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="channel (0-3) of blob" Name="CH" Type="INT"/>
+      <VarDeclaration Comment="index of Blob, where 0 is the largest and default, Up to 9 blobs channels supported" Name="I_BLOB" Type="INT"/>
+      <VarDeclaration Comment="prints outputs if true=1 " Name="INFO" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="Number of blobs on a channel." Name="COUNT" Type="INT"/>
+      <VarDeclaration Comment="size of blob from channel CH and INDEX in pixels" Name="SIZE" Type="INT"/>
+      <VarDeclaration Comment=" frame number used to generate the tracking data" Name="FRAME" Type="INT"/>
+      <VarDeclaration Comment="% confidence for seeing the blob in pixel area/bounding box area for CH/INDEX" Name="CONFIDENCE" Type="INT"/>
+      <VarDeclaration ArraySize="2" Comment="[Width x,Length y] in pixel  of the bounding box for the blob from CH/INDEX" Name="BLOB_WL" Type="INT"/>
+      <VarDeclaration ArraySize="2" Comment="[X,Y] pixel [x,y] coordinate of the centroid for the blob" Name="CENTRIOD_POS" Type="INT"/>
+      <VarDeclaration ArraySize="4" Comment="[RT,LT,TOP,BOTTOM] of blob box" Name="BOX_POS" Type="INT"/>
+      <VarDeclaration ArraySize="2" Comment=" [MAJOR, MINOR] length in pixels of the axis of the bounding ECLIPSE for the blob" Name="ECLIPSE_POS" Type="INT"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Service Interface Function Block Type" LeftInterface="APPLICATION" RightInterface="RESOURCE">
+    <ServiceSequence Name="normal_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO+" Interface="APPLICATION" Parameters="PARAMS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="unsuccessful_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_confirm">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ-" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_error">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_response">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD"/>
+        <OutputPrimitive Event="IND+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+      <ServiceTransaction>
+        <InputPrimitive Event="RSP" Interface="APPLICATION" Parameters="QI,SD"/>
+        <OutputPrimitive Event="response" Interface="RESOURCE" Parameters="QI,SD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD,QI=FALSE"/>
+        <OutputPrimitive Event="inhibited" Interface="RESOURCE"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="error_indication">
+      <ServiceTransaction>
+        <InputPrimitive Event="error" Interface="RESOURCE" Parameters="STATUS"/>
+        <OutputPrimitive Event="IND-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="application_initiated_termination">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT-" Interface="APPLICATION"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="resource_initiated_termination">
+      <ServiceTransaction>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

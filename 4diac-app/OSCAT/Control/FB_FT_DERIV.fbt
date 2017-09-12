@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="calculates the derivate over the signal in with Faktor K" Name="FB_FT_DERIV">
+  <Identification Classification="Control" Standard="OSCAT"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-07-04" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="in"/>
+        <With Var="K"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="run" Type="Event">
+        <With Var="in"/>
+        <With Var="K"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="out"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="out"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input signal" Name="in" Type="REAL"/>
+      <VarDeclaration Comment="Factor" InitialValue="1.0" Name="K" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Result of the derivate" Name="out" Type="REAL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <InternalVars>
+      <VarDeclaration Comment="" InitialValue="" Name="old" Type="REAL"/>
+      <VarDeclaration Comment="" InitialValue="" Name="tx" Type="DWORD"/>
+      <VarDeclaration Comment="" InitialValue="" Name="last" Type="DWORD"/>
+      <VarDeclaration Comment="" InitialValue="" Name="tc" Type="REAL"/>
+    </InternalVars>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="475.0" y="380.0"/>
+      <ECState Comment="Initialization" Name="initialize" x="1235.0" y="95.0">
+        <ECAction Algorithm="INIT" Output="INITO"/>
+      </ECState>
+      <ECState Comment="Normal execution" Name="run" x="215.0" y="750.0">
+        <ECAction Algorithm="run" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="INIT" Destination="initialize" Source="START" x="1215.0" y="410.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="initialize" x="550.0" y="140.0"/>
+      <ECTransition Comment="" Condition="run" Destination="run" Source="START" x="590.0" y="655.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="run" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="INIT">
+      <Other Language="AnyText" Text="old() = in();"/>
+    </Algorithm>
+    <Algorithm Comment="Normally executed algorithm" Name="run">
+      <Other Language="AnyText" Text="tx() = T_PLC_US();&#13;&#10;tc() = DWORD_TO_REAL(tx() - last());&#13;&#10;last() = tx();&#13;&#10;&#13;&#10;if(tc() &gt; 0.0){&#13;&#10;&#9;out() = (in() - old()) / tc() * 1000000.0 * K();&#13;&#10;&#9;old() = in();&#13;&#10;}else{&#13;&#10;&#9;out() = 0.0;&#13;&#10;}"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

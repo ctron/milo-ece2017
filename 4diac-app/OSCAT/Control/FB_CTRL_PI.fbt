@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_CTRL_PI">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-25" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event"/>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="ACTUAL"/>
+        <With Var="SET_POINT"/>
+        <With Var="NOISE"/>
+        <With Var="OFFSET"/>
+        <With Var="MAN_IN"/>
+        <With Var="MANUAL"/>
+        <With Var="KP"/>
+        <With Var="KI"/>
+        <With Var="LIM_L"/>
+        <With Var="LIM_H"/>
+      </Event>
+      <Event Name="RST" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event"/>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="Y"/>
+        <With Var="DIFF"/>
+        <With Var="LIM"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="process value" Name="ACTUAL" Type="REAL"/>
+      <VarDeclaration Comment="setpoint" Name="SET_POINT" Type="REAL"/>
+      <VarDeclaration Comment="noise reduction" Name="NOISE" Type="REAL"/>
+      <VarDeclaration Comment="offset for the output" Name="OFFSET" Type="REAL"/>
+      <VarDeclaration Comment="input value for manual operation" Name="MAN_IN" Type="REAL"/>
+      <VarDeclaration Comment="swithc to manual mode, MAN = TRUE" Name="MANUAL" Type="BOOL"/>
+      <VarDeclaration Comment="proportional gain of the controller" InitialValue="1.0" Name="KP" Type="REAL"/>
+      <VarDeclaration Comment="integral gain of the controller" InitialValue="1.0" Name="KI" Type="REAL"/>
+      <VarDeclaration Comment="output lower limit" InitialValue="-1000.0" Name="LIM_L" Type="REAL"/>
+      <VarDeclaration Comment="output higher limit" InitialValue="1000.0" Name="LIM_H" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="output of the controller" Name="Y" Type="REAL"/>
+      <VarDeclaration Comment="deviation between act and setpoint" Name="DIFF" Type="REAL"/>
+      <VarDeclaration Comment="TRUE if the output has reached a limit" Name="LIM" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Name="FB_CTRL_OUT" Type="FB_CTRL_OUT" x="3420.0" y="1425.0"/>
+    <FB Name="FB_FT_PIWL" Type="FB_FT_PIWL" x="3040.0" y="95.0"/>
+    <FB Name="F_CTRL_IN" Type="F_CTRL_IN" x="1140.0" y="1045.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="Y" Source="FB_CTRL_OUT.Y" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="LIM" Source="FB_CTRL_OUT.LIM" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_CTRL_OUT.CI" Source="FB_FT_PIWL.Y" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_CTRL_IN.SET_POINT" Source="SET_POINT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_CTRL_IN.ACTUAL" Source="ACTUAL" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_CTRL_IN.NOISE" Source="NOISE" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.KP" Source="KP" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.KI" Source="KI" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.LIM_L" Source="LIM_L" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.LIM_H" Source="LIM_H" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_CTRL_OUT.LIM_L" Source="LIM_L" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_CTRL_OUT.LIM_H" Source="LIM_H" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_CTRL_OUT.MANUAL" Source="MANUAL" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_CTRL_OUT.MAN_IN" Source="MAN_IN" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_CTRL_OUT.OFFSET" Source="OFFSET" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.IN" Source="F_CTRL_IN.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="DIFF" Source="F_CTRL_IN.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="F_CTRL_IN.REQ" Source="REQ" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.REQ" Source="F_CTRL_IN.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_CTRL_OUT.REQ" Source="FB_FT_PIWL.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CNF" Source="FB_CTRL_OUT.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.RST" Source="RST" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PIWL.INIT" Source="INIT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="FB_FT_PIWL.INITO" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

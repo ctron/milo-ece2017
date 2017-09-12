@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceType SYSTEM "http://www.holobloc.com/xml/Segment.dtd" >
+<SegmentType Name="EPL" Comment="EPL Segment" >
+  <Identification Standard="61499 ITA" Description="Ethernet POWERLINK segment" />
+  <VersionInfo Organization="4DIAC-Consortium" Version="0.1" Author="4DIAC-IDE" Date="2012-06-18"/>
+  <VarDeclaration Name="Param" Type="WSTRING" Comment="Param" />
+</SegmentType>

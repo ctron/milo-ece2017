@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_SWITCH" Comment="Switch(demultiplex)an event" >
+  <Identification Standard="61499-1" Classification="Event Processing" Function="Event Switch" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2003-12-30" Remarks="Updated for 61499-1 CDV." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-04-14" Remarks="First XML version." />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="EI" Comment="Event Input" >
+        <With Var="G" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO0" Comment="Output,switched from EI when G=0" >
+      </Event>
+      <Event Name="EO1" Comment="Output,switched from EI when G=1" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="G" Type="BOOL" Comment="Switch EI to EI0 when G=0,to EI1 when G=1" />
+    </InputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="START" Comment="Initial State" x="817.64703" y="205.88235" >
+      </ECState>
+      <ECState Name="G0" Comment="Issue EO0 when EI arrives with G=0" x="1211.7646" y="617.64703" >
+        <ECAction Output="EO0" />
+      </ECState>
+      <ECState Name="G1" Comment="Issue EO1 when EI arrives with G=1" x="347.0588" y="617.64703" >
+        <ECAction Output="EO1" />
+      </ECState>
+      <ECTransition Source="START" Destination="G0" Condition="EI&#38;(NOT G)" x="1211.7646" y="205.88235" />
+      <ECTransition Source="G0" Destination="START" Condition="1" x="929.41174" y="435.2941" />
+      <ECTransition Source="START" Destination="G1" Condition="EI&#38;G" x="347.0588" y="205.88235" />
+      <ECTransition Source="G1" Destination="START" Condition="1" x="700.0" y="435.2941" />
+    </ECC>
+  </BasicFB>
+</FBType>

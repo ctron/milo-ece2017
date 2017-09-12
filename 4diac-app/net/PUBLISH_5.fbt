@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="PUBLISH_5" Comment="5-Variable Publisher" >
+  <Identification Standard="61499-1" Classification="Communications" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2003-04-14" />
+  <CompilerInfo header="package fb.rt.net;" >
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="QI" />
+        <With Var="ID" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+        <With Var="QI" />
+        <With Var="SD_1" />
+        <With Var="SD_2" />
+        <With Var="SD_3" />
+        <With Var="SD_4" />
+        <With Var="SD_5" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Connection Identifier" />
+      <VarDeclaration Name="SD_1" Type="ANY" Comment="Data to Send" />
+      <VarDeclaration Name="SD_2" Type="ANY" />
+      <VarDeclaration Name="SD_3" Type="ANY" />
+      <VarDeclaration Name="SD_4" Type="ANY" />
+      <VarDeclaration Name="SD_5" Type="ANY" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

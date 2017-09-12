@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd" >
+<FBType Name="E_RESTART" Comment="Generation of Restart Events" >
+  <Identification Standard="61499-1-A.1" Description="Generation of restart events" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-03-25" Remarks="First XML version." />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventOutputs>
+      <Event Name="COLD" Comment="Cold Restart" >
+      </Event>
+      <Event Name="WARM" Comment="Warm Restart" >
+      </Event>
+      <Event Name="STOP" Comment="Resource is Stopping" >
+      </Event>
+    </EventOutputs>
+  </InterfaceList>
+  <Service RightInterface="E_RESTART" LeftInterface="RESOURCE" >
+    <ServiceSequence Name="cold_restart" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RESOURCE" Event="start" />
+        <OutputPrimitive Interface="E_RESTART" Event="COLD" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="warm_restart" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RESOURCE" Event="restart" />
+        <OutputPrimitive Interface="E_RESTART" Event="WARM" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="stopping" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RESOURCE" Event="stop" />
+        <OutputPrimitive Interface="E_RESTART" Event="STOP" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

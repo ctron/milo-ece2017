@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_BOOL" Comment="Boolean Input Checkbox" >
+  <Identification Standard="61499-1" Function="HMI" Type="BOOL input" Description="Checkbox" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2004-06-08" Remarks="Corrected documentation (no inhibitions)." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI initial value =true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-03-08" Remarks="First XML version" />
+  <CompilerInfo header="package fb.rt.awt; import java.awt.*; import java.awt.event.*;" classdef="public class IN_BOOL extends FBInstance implements ItemListener" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="LABEL" />
+        <With Var="IN" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" Comment="User clicked Checkbox" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Event qualifier" />
+      <VarDeclaration Name="LABEL" Type="WSTRING" Comment="Label" />
+      <VarDeclaration Name="IN" Type="BOOL" Comment="Initial value" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event qualifier" />
+      <VarDeclaration Name="OUT" Type="BOOL" Comment="Output data" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="Checkbox" LeftInterface="IN_BOOL" >
+    <ServiceSequence Name="normal_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_BOOL" Event="INIT+" Parameters="LABEL,IN" />
+        <OutputPrimitive Interface="Checkbox" Event="setLabel" Parameters="LABEL" />
+        <OutputPrimitive Interface="Checkbox" Event="setState" Parameters="IN" />
+        <OutputPrimitive Interface="IN_BOOL" Event="INITO+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="initialization_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_BOOL" Event="INIT-" />
+        <OutputPrimitive Interface="IN_BOOL" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="data_read" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_BOOL" Event="REQ+" />
+        <OutputPrimitive Interface="Checkbox" Event="getState" />
+        <OutputPrimitive Interface="IN_BOOL" Event="CNF+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="user_input" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="Checkbox" Event="itemStateChanged" />
+        <OutputPrimitive Interface="IN_BOOL" Event="IND+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

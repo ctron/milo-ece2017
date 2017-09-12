@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_FT_PIWL">
+  <Identification Classification="Control modules" Description="FT_PIWL is a PI controller with dynamic anti-wind Up." Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-25" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Type="Event">
+        <With Var="IN"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+        <With Var="KP"/>
+        <With Var="KI"/>
+        <With Var="LIM_L"/>
+        <With Var="LIM_H"/>
+      </Event>
+      <Event Name="RST" Type="Event">
+        <With Var="IN"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Type="Event"/>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="Y"/>
+        <With Var="LIM"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="input signal" Name="IN" Type="REAL"/>
+      <VarDeclaration Comment="proportional gain of the controller" InitialValue="1.0" Name="KP" Type="REAL"/>
+      <VarDeclaration Comment="integral gain of the controll" InitialValue="1.0" Name="KI" Type="REAL"/>
+      <VarDeclaration Comment="lower limit of the integrator output" InitialValue="-1.0E38" Name="LIM_L" Type="REAL"/>
+      <VarDeclaration Comment="upper limit of the integrator output" InitialValue="1.0E38" Name="LIM_H" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="output of the controller" Name="Y" Type="REAL"/>
+      <VarDeclaration Comment="TRUE if the output has reached a limit" Name="LIM" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <InternalVars>
+      <VarDeclaration Comment="Internal Variable" InitialValue="" Name="T_LAST" Type="DWORD"/>
+      <VarDeclaration Comment="Internal Variable" InitialValue="" Name="IN_LAST" Type="REAL"/>
+      <VarDeclaration Comment="Internal Variable" InitialValue="" Name="I" Type="REAL"/>
+      <VarDeclaration Comment="Internal Variable" InitialValue="" Name="INIT" Type="BOOL"/>
+    </InternalVars>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Initialization" Name="INIT" x="920.0" y="140.0">
+        <ECAction Algorithm="RESET" Output="INITO"/>
+      </ECState>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECState Comment="" Name="RST" x="1225.0" y="840.0">
+        <ECAction Algorithm="RESET"/>
+      </ECState>
+      <ECTransition Comment="" Condition="INIT" Destination="INIT" Source="START" x="920.0" y="425.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="INIT" x="550.0" y="140.0"/>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="550.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+      <ECTransition Comment="" Condition="RST" Destination="RST" Source="START" x="930.0" y="755.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="RST" x="1015.0" y="580.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="RESET">
+      <ST Text="INIT := true;&#13;&#10;IN_LAST := IN;&#13;&#10;T_LAST := T_PLC_US();&#13;&#10;I := 0.0;"/>
+    </Algorithm>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="(* TODO consider this in the export filter *)&#13;&#10;VAR&#13;&#10;&#9;tx: DWORD;&#13;&#10;&#9;tc : REAL;&#13;&#10;&#9;p: REAL;&#13;&#10;END_VAR&#13;&#10;&#13;&#10;&#13;&#10; (* read last cycle time in Microseconds *)&#13;&#10;&#9;tx := T_PLC_US();&#13;&#10;&#9;tc := DWORD_TO_REAL(tx - T_LAST);&#13;&#10;&#9;T_LAST := tx;&#13;&#10;&#13;&#10;&#9;(* calculate proportional part *)&#13;&#10;&#9;p := KP * IN;&#13;&#10;&#13;&#10;&#9;(* run integrator *)&#13;&#10;&#9;I := (IN + IN_LAST) * 5.0E-7 * KI * tc + I;&#13;&#10;&#9;IN_LAST := IN;&#13;&#10;&#13;&#10;&#9;(* calculate output Y *)&#13;&#10;&#9;Y := p + I;&#13;&#10;&#13;&#10;&#9;(* check output for limits *)&#13;&#10;&#9;IF Y &gt;= LIM_H THEN&#13;&#10;&#9;&#9;Y := LIM_H;&#13;&#10;&#9;&#9;IF KI &lt;&gt; 0.0 THEN&#13;&#10;&#9;&#9;&#9;I := LIM_H - p;&#13;&#10;&#9;&#9;ELSE&#13;&#10;&#9;&#9;&#9;I := 0.0;&#13;&#10;&#9;&#9;END_IF;&#13;&#10;&#9;&#9;LIM := TRUE;&#13;&#10;&#9;ELSIF Y &lt;= LIM_L THEN&#13;&#10;&#9;&#9;Y := LIM_L;&#13;&#10;&#9;&#9;IF KI &lt;&gt; 0.0 THEN&#13;&#10;&#9;&#9;&#9;I := LIM_L - p;&#13;&#10;&#9;&#9;ELSE&#13;&#10;&#9;&#9;&#9;I := 0.0;&#13;&#10;&#9;&#9;END_IF;&#13;&#10;&#9;&#9;LIM := TRUE;&#13;&#10;&#9;ELSE&#13;&#10;&#9;&#9;LIM := FALSE;&#13;&#10;&#9;END_IF;&#13;&#10;&#9;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Modell of a simple mechanical press" Name="PRESS">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="JHC" Date="2003-12-05" Organization="Rockwell Automation" Remarks="Renamed from NEWCOMPFB." Version="0.2"/>
+  <VersionInfo Author="JHC" Date="2002-01-08" Organization="Rockwell Automation" Remarks="Added DLY FB as example." Version="0.1"/>
+  <VersionInfo Author="JHC" Date="2000-05-27" Organization="Rockwell Automation" Version="0.0"/>
+  <CompilerInfo header="package fb.rt.mach; import fb.rt.mva.*;"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT"/>
+      <Event Comment="Request command for transport unit" Name="REQ_TRANS">
+        <With Var="TRANS_ADV1"/>
+        <With Var="TRANS_ADV2"/>
+        <With Var="TRANS_RET"/>
+      </Event>
+      <Event Comment="Request command for press unit" Name="REQ_PRESS">
+        <With Var="PRESS_FWD"/>
+        <With Var="PRESS_REV"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO"/>
+      <Event Comment="Sensors of transport unit have changed" Name="IND_TRANS">
+        <With Var="TRANS_HOME"/>
+        <With Var="TRANS_MID"/>
+        <With Var="TRANS_END"/>
+      </Event>
+      <Event Comment="Sensors of press unit have changed" Name="IND_PRESS">
+        <With Var="PRESS_HOME"/>
+        <With Var="PRESS_END"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Advance transport unit to position 1 (middle position), must be true until position MID is reachted" Name="TRANS_ADV1" Type="BOOL"/>
+      <VarDeclaration Comment="Advance transport unit to position 2 (end position), must be true until position END is reachted" Name="TRANS_ADV2" Type="BOOL"/>
+      <VarDeclaration Comment="Advance transport unit back to home position, must be true until position HOME is reachted" Name="TRANS_RET" Type="BOOL"/>
+      <VarDeclaration Comment="Advance press forward, must be true until position END is reachted" Name="PRESS_FWD" Type="BOOL"/>
+      <VarDeclaration Comment="Advance press backward, must be true until position HOME is reachted" Name="PRESS_REV" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Transport is in HOME postion" Name="TRANS_HOME" Type="BOOL"/>
+      <VarDeclaration Comment="Transport is in MID postion" Name="TRANS_MID" Type="BOOL"/>
+      <VarDeclaration Comment="Transport is in END postion" Name="TRANS_END" Type="BOOL"/>
+      <VarDeclaration Comment="Press is in HOME postion" Name="PRESS_HOME" Type="BOOL"/>
+      <VarDeclaration Comment="Press is in END postion" Name="PRESS_END" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Name="CLCK" Type="E_CYCLE" x="52" y="180">
+      <Parameter Name="DT" Value="t#250ms"/>
+    </FB>
+    <FB Name="SP1" Type="XSPACE" x="507" y="1">
+      <Parameter Name="LBLS" Value="[&quot;&quot;,&quot;&quot;,PART2,PART1]"/>
+      <Parameter Name="DIMS" Value="[3,3]"/>
+      <Parameter Name="DIA" Value="25"/>
+    </FB>
+    <FB Name="SP2" Type="XSPACE" x="1027" y="1">
+      <Parameter Name="LBLS" Value="[PressFit,&quot;&quot;,&quot;&quot;,Transport]"/>
+      <Parameter Name="DIMS" Value="[3,3]"/>
+      <Parameter Name="DIA" Value="25"/>
+    </FB>
+    <FB Name="PRESS_VIEW" Type="MECH_VIEW" x="816" y="158">
+      <Parameter Name="LEN" Value="3"/>
+      <Parameter Name="DIA" Value="25"/>
+      <Parameter Name="DIR" Value="1"/>
+      <Parameter Name="BKGD" Value="COLOR#gray"/>
+    </FB>
+    <FB Name="TRANSPORT_VIEW" Type="MECH_VIEW" x="963" y="629">
+      <Parameter Name="LEN" Value="7"/>
+      <Parameter Name="DIA" Value="25"/>
+      <Parameter Name="DIR" Value="0"/>
+    </FB>
+    <FB Name="TRANSPORT_MODEL" Type="DSCYL_MDL" x="156" y="649">
+      <Parameter Name="VF1" Value="10"/>
+      <Parameter Name="VF2" Value="10"/>
+      <Parameter Name="VR" Value="10"/>
+      <Parameter Name="ETA" Value="0.5"/>
+    </FB>
+    <FB Name="TRANSPORT_LDU" Type="E_LDU" x="747" y="759">
+      <Parameter Name="S0" Value="VSTYLE#EMPTY"/>
+    </FB>
+    <FB Name="UNLOAD_TRANS" Type="E_R_TRIG" x="394" y="916"/>
+    <FB Name="LD_TRANS" Type="E_R_TRIG" x="385" y="759"/>
+    <FB Name="PRESS_MODEL" Type="MECH2_MDL" x="218" y="180">
+      <Parameter Name="VF" Value="10"/>
+      <Parameter Name="VR" Value="10"/>
+    </FB>
+    <FB Name="PRESS_LDU" Type="E_LDU" x="623" y="385">
+      <Parameter Name="S0" Value="VSTYLE#EMPTY"/>
+      <Parameter Name="W1" Value="[255,0,255]"/>
+      <Parameter Name="S1" Value="VSTYLE#RING"/>
+    </FB>
+    <FB Name="UNLOAD_PRESS" Type="E_R_TRIG" x="427" y="489"/>
+    <FB Name="LD_PRESS" Type="E_R_TRIG" x="427" y="385"/>
+    <FB Name="TRANSPORT_PRESSED" Type="E_LDU" x="552" y="759">
+      <Parameter Name="S1" Value="VSTYLE#PEG"/>
+      <Parameter Name="S0" Value="VSTYLE#PEGRING"/>
+      <Parameter Name="W1" Value="[255,0,255]"/>
+    </FB>
+    <EventConnections>
+      <Connection Destination="PRESS_VIEW.INIT" Source="SP1.INITO" dx1="22" dx2="0" dy="0"/>
+      <Connection Destination="SP2.INIT" Source="PRESS_VIEW.INITO" dx1="16" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_VIEW.INIT" Source="SP2.INITO" dx1="4" dx2="27" dy="145"/>
+      <Connection Destination="TRANSPORT_MODEL.CLK" Source="CLCK.EO" dx1="10" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_VIEW.REQ" Source="TRANSPORT_MODEL.INDP" dx1="70" dx2="0" dy="0"/>
+      <Connection Destination="UNLOAD_TRANS.EI" Source="TRANSPORT_MODEL.INDS" dx1="93" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_LDU.UNLD" Source="UNLOAD_TRANS.EO" dx1="193" dx2="32" dy="211"/>
+      <Connection Destination="LD_TRANS.EI" Source="TRANSPORT_MODEL.INDS" dx1="122" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_MODEL.CLK" Source="CLCK.EO" dx1="10" dx2="23" dy="114"/>
+      <Connection Destination="PRESS_VIEW.REQ" Source="PRESS_MODEL.INDP" dx1="31" dx2="43" dy="-590"/>
+      <Connection Destination="UNLOAD_PRESS.EI" Source="PRESS_MODEL.INDS" dx1="83" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_LDU.UNLD" Source="UNLOAD_PRESS.EO" dx1="27" dx2="0" dy="0"/>
+      <Connection Destination="LD_PRESS.EI" Source="PRESS_MODEL.INDS" dx1="123" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_LDU.LD1" Source="LD_PRESS.EO" dx1="50" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_VIEW.REQ" Source="PRESS_LDU.LD" dx1="16" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_VIEW.REQ" Source="TRANSPORT_LDU.LD" dx1="40" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_PRESSED.LD1" Source="LD_TRANS.EO" dx1="29" dx2="29" dy="-341"/>
+      <Connection Destination="TRANSPORT_LDU.LD1" Source="TRANSPORT_PRESSED.LD" dx1="54" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_PRESSED.UNLD" Source="UNLOAD_PRESS.EO" dx1="30" dx2="0" dy="-957"/>
+      <Connection Destination="SP1.INIT" Source="INIT" dx1="488" dx2="0" dy="0"/>
+      <Connection Destination="IND_PRESS" Source="PRESS_MODEL.INDS" dx1="324" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_PRESSED.LD1" Source="TRANSPORT_VIEW.INITO" dx1="31" dx2="27" dy="-34"/>
+      <Connection Destination="PRESS_LDU.LD1" Source="TRANSPORT_VIEW.INITO" dx1="31" dx2="99" dy="-34"/>
+      <Connection Destination="CLCK.START" Source="TRANSPORT_VIEW.INITO" dx1="31" dx2="41" dy="-34"/>
+      <Connection Destination="INITO" Source="TRANSPORT_VIEW.INITO" dx1="1051" dx2="0" dy="0"/>
+      <Connection Destination="IND_TRANS" Source="TRANSPORT_MODEL.INDS" dx1="261" dx2="0" dy="0"/>
+    </EventConnections>
+    <DataConnections>
+      <Connection Destination="TRANSPORT_MODEL.FAULT" Source="TRANSPORT_VIEW.FAULT" dx1="58" dx2="84" dy="273"/>
+      <Connection Destination="TRANSPORT_VIEW.POS" Source="TRANSPORT_MODEL.POS" dx1="87" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_VIEW.STYLE" Source="TRANSPORT_LDU.STYLE" dx1="70" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_VIEW.WKPC" Source="TRANSPORT_LDU.WKPC" dx1="90" dx2="0" dy="0"/>
+      <Connection Destination="UNLOAD_TRANS.QI" Source="TRANSPORT_MODEL.END" dx1="77" dx2="0" dy="0"/>
+      <Connection Destination="LD_TRANS.QI" Source="TRANSPORT_MODEL.HOME" dx1="108" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_VIEW.POS" Source="PRESS_MODEL.POS" dx1="99" dx2="34" dy="126"/>
+      <Connection Destination="PRESS_MODEL.FAULT" Source="PRESS_VIEW.FAULT" dx1="15" dx2="75" dy="315"/>
+      <Connection Destination="PRESS_VIEW.STYLE" Source="PRESS_LDU.STYLE" dx1="28" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_VIEW.WKPC" Source="PRESS_LDU.WKPC" dx1="43" dx2="0" dy="0"/>
+      <Connection Destination="UNLOAD_PRESS.QI" Source="PRESS_MODEL.END" dx1="12" dx2="0" dy="0"/>
+      <Connection Destination="LD_PRESS.QI" Source="PRESS_MODEL.HOME" dx1="114" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_LDU.S1" Source="TRANSPORT_PRESSED.STYLE" dx1="45" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_LDU.W1" Source="TRANSPORT_PRESSED.WKPC" dx1="43" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_HOME" Source="PRESS_MODEL.HOME" dx1="330" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_END" Source="PRESS_MODEL.END" dx1="325" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_MODEL.FWD" Source="PRESS_FWD" dx1="178" dx2="0" dy="0"/>
+      <Connection Destination="PRESS_MODEL.REV" Source="PRESS_REV" dx1="178" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_MODEL.ADV1" Source="TRANS_ADV1" dx1="113" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_MODEL.ADV2" Source="TRANS_ADV2" dx1="113" dx2="0" dy="0"/>
+      <Connection Destination="TRANSPORT_MODEL.RET" Source="TRANS_RET" dx1="117" dx2="0" dy="0"/>
+      <Connection Destination="TRANS_HOME" Source="TRANSPORT_MODEL.HOME" dx1="266" dx2="0" dy="0"/>
+      <Connection Destination="TRANS_MID" Source="TRANSPORT_MODEL.MID" dx1="261" dx2="0" dy="0"/>
+      <Connection Destination="TRANS_END" Source="TRANSPORT_MODEL.END" dx1="261" dx2="0" dy="0"/>
+    </DataConnections>
+  </FBNetwork>
+</FBType>

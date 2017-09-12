@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_CONTROL_SET2">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-24" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="request calcuation for P" Name="REQ_P" Type="Event">
+        <With Var="KS"/>
+        <With Var="TU"/>
+        <With Var="TG"/>
+      </Event>
+      <Event Comment="request calculation for PI" Name="REQ_PI" Type="Event">
+        <With Var="KS"/>
+        <With Var="TU"/>
+        <With Var="TG"/>
+      </Event>
+      <Event Comment="request calculation for PID" Name="REQ_PID" Type="Event">
+        <With Var="KS"/>
+        <With Var="TU"/>
+        <With Var="TG"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF_P" Type="Event">
+        <With Var="KP"/>
+      </Event>
+      <Event Name="CNF_PI" Type="Event">
+        <With Var="KP"/>
+        <With Var="TN"/>
+        <With Var="KI"/>
+      </Event>
+      <Event Name="CNF_PID" Type="Event">
+        <With Var="KP"/>
+        <With Var="TN"/>
+        <With Var="TV"/>
+        <With Var="KI"/>
+        <With Var="KD"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="critical gain" Name="KS" Type="REAL"/>
+      <VarDeclaration Name="TU" Type="REAL"/>
+      <VarDeclaration Name="TG" Type="REAL"/>
+      <VarDeclaration Comment="default value KP for P controller" InitialValue="1.0" Name="P_K" Type="REAL"/>
+      <VarDeclaration Comment="default value KP for PI controller" InitialValue="0.9" Name="PI_K" Type="REAL"/>
+      <VarDeclaration Comment="default value TN for PI controller" InitialValue="3.33" Name="PI_TN" Type="REAL"/>
+      <VarDeclaration Comment="default value KP for PID controller" InitialValue="1.2" Name="PID_K" Type="REAL"/>
+      <VarDeclaration Comment="default value TN for PID controller" InitialValue="2.0" Name="PID_TN" Type="REAL"/>
+      <VarDeclaration Comment="default value TV for PID controller" InitialValue="0.5" Name="PID_TV" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="variable gain" Name="KP" Type="REAL"/>
+      <VarDeclaration Comment="past set time of the integrator" Name="TN" Type="REAL"/>
+      <VarDeclaration Comment="retention time of the differentiator" Name="TV" Type="REAL"/>
+      <VarDeclaration Comment="gain of the integrator" Name="KI" Type="REAL"/>
+      <VarDeclaration Comment="gain of the differentiator" Name="KD" Type="REAL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <InternalVars>
+      <VarDeclaration Comment="" InitialValue="" Name="TX" Type="REAL"/>
+    </InternalVars>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="950.0" y="760.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="190.0" y="1330.0">
+        <ECAction Algorithm="REQ_P" Output="CNF_P"/>
+      </ECState>
+      <ECState Comment="" Name="REQ_PI" x="1235.0" y="380.0">
+        <ECAction Algorithm="REQ_PI" Output="CNF_PI"/>
+      </ECState>
+      <ECState Comment="" Name="REQ_PID" x="1375.0" y="905.0">
+        <ECAction Algorithm="REQ_PID" Output="CNF_PID"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ_P" Destination="REQ" Source="START" x="775.0" y="1095.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+      <ECTransition Comment="" Condition="REQ_PI" Destination="REQ_PI" Source="START" x="860.0" y="435.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ_PI" x="1315.0" y="675.0"/>
+      <ECTransition Comment="" Condition="REQ_PID" Destination="REQ_PID" Source="START" x="1495.0" y="770.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ_PID" x="1230.0" y="1240.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ_P">
+      <ST Text="(* Testing new idea planed for IEC61499-5 that allows to call other algs *)&#13;&#10;CALC_TX();&#13;&#10;&#13;&#10;KP := P_K * TX;"/>
+    </Algorithm>
+    <Algorithm Comment="ALG" Name="REQ_PI">
+      <ST Text="(* Testing new idea planed for IEC61499-5 that allows to call other algs *)&#13;&#10;CALC_TX();&#13;&#10;&#13;&#10;KP := PI_K * TX;&#13;&#10;TN := PI_TN * TU;&#9;&#9;&#13;&#10;&#13;&#10;CALC_KI();"/>
+    </Algorithm>
+    <Algorithm Comment="ALG" Name="REQ_PID">
+      <ST Text="(* Testing new idea planed for IEC61499-5 that allows to call other algs *)&#13;&#10;CALC_TX();&#13;&#10;&#13;&#10;KP := PID_K * TX;&#13;&#10;TN := PID_TN * TU;&#13;&#10;TV := PID_TV * TU;&#9;&#13;&#10;&#13;&#10;CALC_KI();&#13;&#10;&#13;&#10;KD := KP * TV;"/>
+    </Algorithm>
+    <Algorithm Comment="ALG" Name="CALC_TX">
+      <ST Text="TX := 0.0;&#13;&#10;IF TU &gt; 0.0 AND KS &gt; 0.0 THEN TX := TG / TU / KS; END_IF;"/>
+    </Algorithm>
+    <Algorithm Comment="ALG" Name="CALC_KI">
+      <ST Text="IF TN &gt; 0.0 THEN KI := KP / TN; ELSE KI := 0.0; END_IF;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

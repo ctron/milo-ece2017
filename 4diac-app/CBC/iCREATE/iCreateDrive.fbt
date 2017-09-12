@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="iCreateDrive">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2012-08-27" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="Stop" Type="Event"/>
+      <Event Comment="Drives in an arc. " Name="Arc" Type="Event">
+        <With Var="Speed"/>
+        <With Var="Radius"/>
+      </Event>
+      <Event Comment="Drives straight at speed in mm/s" Name="Straight" Type="Event">
+        <With Var="Speed"/>
+      </Event>
+      <Event Comment="spins Clockwise with edge speed of speed in mm/s according to Clockwise" Name="Spin" Type="Event">
+        <With Var="Speed"/>
+        <With Var="Clockwise"/>
+      </Event>
+      <Event Comment="Drive each motoe/ wheel directiy" Name="Direct" Type="Event">
+        <With Var="RtSpeed"/>
+        <With Var="LtSpeed"/>
+      </Event>
+      <Event Name="GetInfo" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="" Name="StopO" Type="Event"/>
+      <Event Name="ArcO" Type="Event">
+        <With Var="RadiusOut"/>
+      </Event>
+      <Event Name="StraightO" Type="Event"/>
+      <Event Name="SpinO" Type="Event"/>
+      <Event Name="DirectO" Type="Event"/>
+      <Event Name="GetInfoO" Type="Event">
+        <With Var="Velocity"/>
+        <With Var="VelocityLt"/>
+        <With Var="VelocityRt"/>
+        <With Var="Angle"/>
+        <With Var="AngleTotal"/>
+        <With Var="Distance"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Arc turning radius" Name="Radius" Type="INT"/>
+      <VarDeclaration Comment="speed (-500 to 500 mm/s) of both wheels" Name="Speed" Type="INT"/>
+      <VarDeclaration Comment="Left Wheel speed (-500 to 500 mm/s)" Name="LtSpeed" Type="INT"/>
+      <VarDeclaration Comment="Right Wheel speed (-500 to 500 mm/s)" Name="RtSpeed" Type="INT"/>
+      <VarDeclaration Comment="T=1=Clcokwise:; r" Name="Clockwise" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Turning radius used" Name="RadiusOut" Type="INT"/>
+      <VarDeclaration ArraySize="3" Comment="[both,Lt,Rt] wheel speeds" Name="Speeds" Type="INT"/>
+      <VarDeclaration Comment="wheel (both) velocity (speed) in mms" Name="Velocity" Type="INT"/>
+      <VarDeclaration Comment="Lt wheel velocity (speed) in mms" Name="VelocityLt" Type="INT"/>
+      <VarDeclaration Comment="Rt wheel velocity (speed) in mms" Name="VelocityRt" Type="INT"/>
+      <VarDeclaration Comment="normalized angle" Name="Angle" Type="INT"/>
+      <VarDeclaration Comment="accumulated angle" Name="AngleTotal" Type="INT"/>
+      <VarDeclaration Comment=" accumulated distance the Create has traveled since it was turned on " Name="Distance" Type="INT"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Service Interface Function Block Type" LeftInterface="APPLICATION" RightInterface="RESOURCE">
+    <ServiceSequence Name="normal_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO+" Interface="APPLICATION" Parameters="PARAMS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="unsuccessful_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_confirm">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ-" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_error">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_response">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD"/>
+        <OutputPrimitive Event="IND+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+      <ServiceTransaction>
+        <InputPrimitive Event="RSP" Interface="APPLICATION" Parameters="QI,SD"/>
+        <OutputPrimitive Event="response" Interface="RESOURCE" Parameters="QI,SD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD,QI=FALSE"/>
+        <OutputPrimitive Event="inhibited" Interface="RESOURCE"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="error_indication">
+      <ServiceTransaction>
+        <InputPrimitive Event="error" Interface="RESOURCE" Parameters="STATUS"/>
+        <OutputPrimitive Event="IND-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="application_initiated_termination">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT-" Interface="APPLICATION"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="resource_initiated_termination">
+      <ServiceTransaction>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

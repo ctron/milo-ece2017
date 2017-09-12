@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="FB_LEDS" Comment="An orientable array of rectangular LEDs" >
+  <Identification Standard="61499-1" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2003-11-22" Remarks="Derived from FB_BAR." />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" >
+        <With Var="FGD" />
+        <With Var="BKGD" />
+        <With Var="W" />
+        <With Var="H" />
+        <With Var="DIR" />
+        <With Var="N" />
+      </Event>
+      <Event Name="REQ" Comment="Update the bar" >
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+      </Event>
+      <Event Name="CNF" Comment="REQ Confirmation" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="IN" Type="WORD" Comment="Bits to display(up to 16)" />
+      <VarDeclaration Name="FGD" Type="COLOR" InitialValue="yellow" Comment="Foreground Color" />
+      <VarDeclaration Name="BKGD" Type="COLOR" InitialValue="black" Comment="Background Color" />
+      <VarDeclaration Name="W" Type="UINT" InitialValue="100" Comment="Bar width" />
+      <VarDeclaration Name="H" Type="UINT" InitialValue="25" Comment="Bar height" />
+      <VarDeclaration Name="DIR" Type="UINT" Comment="Orientation:0=L/R,1=T/B,2=R/L,3=B/T" />
+      <VarDeclaration Name="N" Type="UINT" InitialValue="1" Comment="Number of bits to display,starting with LSB-Internally limited to 0&#60;N&#60;17" />
+    </InputVars>
+  </InterfaceList>
+</FBType>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd" >
+<FBType Name="PUBLISH_1" Comment="Single-Variable Publisher" >
+  <Identification Standard="61499-1-3.2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-04-24" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-12-08" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="QI" />
+        <With Var="ID" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+        <With Var="QI" />
+        <With Var="SD_1" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Connection Identifier" />
+      <VarDeclaration Name="SD_1" Type="ANY" Comment="Data to Send" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="SUBSCRIBE_1" LeftInterface="PUBLISH_1" Comment="Data Publication Service" >
+    <ServiceSequence Name="normal_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="PUBLISH_1" Event="INIT+" Parameters="ID" />
+        <OutputPrimitive Interface="PUBLISH_1" Event="INITO+" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <InputPrimitive Interface="SUBSCRIBE_1" Event="INIT+" Parameters="ID" />
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="INITO+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="publisher_rejected_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="PUBLISH_1" Event="INIT+" Parameters="ID" />
+        <OutputPrimitive Interface="PUBLISH_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="subscriber_rejected_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="SUBSCRIBE_1" Event="INIT+" Parameters="ID" />
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="normal_data_transfer" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="PUBLISH_1" Event="REQ+" Parameters="SD_1" />
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="IND+" Parameters="RD_1" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="PUBLISH_1" Event="CNF+" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <InputPrimitive Interface="SUBSCRIBE_1" Event="RSP+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="data_transfer_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="PUBLISH_1" Event="REQ+" Parameters="SD_1" />
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="IND-" Parameters="STATUS" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="PUBLISH_1" Event="CNF+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="publisher_initiated_disconnect" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="PUBLISH_1" Event="INIT-" />
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="PUBLISH_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="subscriber_initiated_disconnect" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="SUBSCRIBE_1" Event="INIT-" />
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="system_publisher_disconnect" >
+      <ServiceTransaction >
+        <OutputPrimitive Interface="PUBLISH_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="system_subscriber_disconnect" >
+      <ServiceTransaction >
+        <OutputPrimitive Interface="SUBSCRIBE_1" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Adds two number values" Name="F_ADD_TOD_TIME">
+  <Identification Classification="Arithmetic" Function="ADDER" Standard="61131-3" Type="Mathematical function"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-09-20" Organization="4DIAC-Consortium" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN1"/>
+        <With Var="IN2"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="First funtion input" Name="IN1" Type="TIME_OF_DAY"/>
+      <VarDeclaration Comment="Second function input" Name="IN2" Type="TIME"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Function output" Name="OUT" Type="TIME_OF_DAY"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

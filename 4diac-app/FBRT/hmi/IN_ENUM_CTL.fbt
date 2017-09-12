@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_ENUM_CTL" Comment="Control block for IN_ENUM" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2004-06-21" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="QI" />
+        <With Var="TYPE" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+        <With Var="QI" />
+        <With Var="I" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="CHOICES" />
+      </Event>
+      <Event Name="CNF" Comment="Confirmation of Requested Service" >
+        <With Var="QO" />
+        <With Var="CHOICES" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+      <VarDeclaration Name="TYPE" Type="WSTRING" Comment="Enumerated Type Name" />
+      <VarDeclaration Name="I" Type="UINT" Comment="Current enumerated index" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="CHOICES" Type="WSTRING" Comment="Comma-separated enumeration namelist" />
+      <VarDeclaration Name="OUT" Type="ANY" Comment="Enumerated variable with selected value" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

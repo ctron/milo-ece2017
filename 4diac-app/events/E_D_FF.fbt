@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_D_FF" Comment="Event-driven Data(D)Latch" >
+  <Identification Standard="61499-1" Classification="Event processing" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2003-12-30" Remarks="Updated for 61499-1 CDV." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-01-29" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-03-12" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="CLK" Comment="Data Clock" >
+        <With Var="D" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Output Event when Q output changes" >
+        <With Var="Q" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="D" Type="BOOL" Comment="Data Input" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="Q" Type="BOOL" Comment="Latched Data" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="Q0" Comment="Q is FALSE initially" x="282.35294" y="100.0" >
+      </ECState>
+      <ECState Name="RESET" Comment="Reset Q and issue EO" x="311.7647" y="658.8235" >
+        <ECAction Algorithm="LATCH" Output="EO" />
+      </ECState>
+      <ECState Name="SET" Comment="Latch and issue EO" x="888.2353" y="100.0" >
+        <ECAction Algorithm="LATCH" Output="EO" />
+      </ECState>
+      <ECTransition Source="Q0" Destination="SET" Condition="CLK&#38;D" x="541.17645" y="100.0" />
+      <ECTransition Source="SET" Destination="RESET" Condition="CLK&#38;(NOT D)" x="888.2353" y="329.41174" />
+      <ECTransition Source="RESET" Destination="SET" Condition="CLK&#38;D" x="311.7647" y="341.17645" />
+    </ECC>
+  <Algorithm Name="LATCH" >
+    <ST Text="Q:=D;&#10;" />
+  </Algorithm>
+  </BasicFB>
+</FBType>

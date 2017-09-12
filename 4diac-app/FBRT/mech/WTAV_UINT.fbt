@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Weighted Average" Name="WTAV_UINT">
+  <Identification Classification="Math" Function="Weighted average" Standard="61499-1"/>
+  <VersionInfo Author="JHC" Date="2005-06-01" Organization="Holobloc Inc" Remarks="Re-compiled with new emitter." Version="0.4"/>
+  <VersionInfo Author="JHC" Date="2004-09-25" Organization="Rockwell Automation" Remarks="Deleted INIT, INITO; moved to fb.rt.math." Version="0.3"/>
+  <VersionInfo Author="JHC" Date="2003-03-17" Organization="Rockwell Automation" Remarks="Moved from fb.rt.omac to fb.rt.mach." Version="0.2"/>
+  <VersionInfo Author="JHC" Date="2002-02-28" Organization="Rockwell Automation" Remarks="Changed &quot;=&quot; to &quot;:=&quot;, REAL_TO_INT to Java cast in ALGORITHM REQ." Version="0.1"/>
+  <VersionInfo Author="JHC" Date="2001-04-14" Organization="Rockwell Automation" Remarks="First XML version" Version="0.0"/>
+  <CompilerInfo header="package fb.rt.math;">
+    <Compiler Language="Java" Product="JDK" Vendor="Sun" Version="1.4.2"/>
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Calculation" Name="REQ">
+        <With Var="X1"/>
+        <With Var="X2"/>
+        <With Var="ETA"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Value when ETA=0.0" Name="X1" Type="UINT"/>
+      <VarDeclaration Comment="Value when ETA=1.0" Name="X2" Type="UINT"/>
+      <VarDeclaration Name="ETA" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="ETA*X1+(1-ETA)*X2" Name="OUT" Type="UINT"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC/>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <Other Language="Java" Text="OUT.value=(int)(X1.value+ETA.value*(X2.value-X1.value));&#10;CNF.serviceEvent(this);&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

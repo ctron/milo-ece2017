@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="FB_SEL_COLOR" Comment="COLOR Selection" >
+  <Identification Standard="61499-1" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2004-06-21" Remarks="Moved from hmi to math." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-04-05" Remarks="First XML version." />
+  <CompilerInfo header="package fb.rt.math;" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version="1.4.2" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="REQ" >
+        <With Var="G" />
+        <With Var="IN0" />
+        <With Var="IN1" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="CNF" >
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="G" Type="BOOL" Comment="Selector" />
+      <VarDeclaration Name="IN0" Type="COLOR" Comment="Selected when G=0" />
+      <VarDeclaration Name="IN1" Type="COLOR" Comment="Selected when G=1" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="OUT" Type="COLOR" Comment="Selected value" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+  <Algorithm Name="REQ" >
+    <Other Language="JAVA" Text="public void service_REQ(boolean qi){&#10;OUT.value=G.value?IN1.value:IN0.value;}&#10;CNF.serviceEvent(this);}&#10;" />
+  </Algorithm>
+  </BasicFB>
+</FBType>

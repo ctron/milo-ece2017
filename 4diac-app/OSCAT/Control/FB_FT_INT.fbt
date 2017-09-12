@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Integrator" Name="FB_FT_INT">
+  <Identification Standard="OSCAT"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-07-27" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="Input"/>
+        <With Var="K"/>
+        <With Var="rst"/>
+        <With Var="Out_max"/>
+        <With Var="Out_min"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="Input"/>
+        <With Var="K"/>
+        <With Var="rst"/>
+        <With Var="Out_max"/>
+        <With Var="Out_min"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="Output"/>
+        <With Var="lim"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="Output"/>
+        <With Var="lim"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input" Name="Input" Type="REAL"/>
+      <VarDeclaration Comment="Amplification factor for Integrator" Name="K" Type="REAL"/>
+      <VarDeclaration Comment="Reset" Name="rst" Type="BOOL"/>
+      <VarDeclaration Comment="Maximal output value" Name="Out_max" Type="REAL"/>
+      <VarDeclaration Comment="Minimal output value" Name="Out_min" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output" Name="Output" Type="REAL"/>
+      <VarDeclaration Comment="Returns true if the limit is exceeded" Name="lim" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Name="FB_INTEGRATE" Type="FB_INTEGRATE" x="1140.0" y="190.0"/>
+    <FB Name="F_LIMIT2" Type="F_LIMIT2" x="760.0" y="1140.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="FB_INTEGRATE.X" Source="Input" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_INTEGRATE.K" Source="K" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_INTEGRATE.reset" Source="rst" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_LIMIT2.MX" Source="Out_max" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_LIMIT2.MN" Source="Out_min" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_LIMIT2.IN" Source="FB_INTEGRATE.Y_OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="lim" Source="F_LIMIT2.LIM" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="Output" Source="F_LIMIT2.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="FB_INTEGRATE.INIT" Source="INIT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_INTEGRATE.REQ" Source="REQ" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_LIMIT2.REQ" Source="FB_INTEGRATE.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CNF" Source="F_LIMIT2.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="FB_INTEGRATE.INITO" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

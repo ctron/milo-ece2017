@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="CLIENT_5_3" Comment="5 SD/3 RD Client Interface" >
+  <Identification Standard="61499-1" Function="Communication" Description="5SD/3RD Client" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2002-06-01" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" >
+        <With Var="QI" />
+        <With Var="ID" />
+      </Event>
+      <Event Name="REQ" >
+        <With Var="QI" />
+        <With Var="SD_1" />
+        <With Var="SD_2" />
+        <With Var="SD_3" />
+        <With Var="SD_4" />
+        <With Var="SD_5" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="CNF" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="RD_1" />
+        <With Var="RD_2" />
+        <With Var="RD_3" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" />
+      <VarDeclaration Name="ID" Type="WSTRING" />
+      <VarDeclaration Name="SD_1" Type="ANY" />
+      <VarDeclaration Name="SD_2" Type="ANY" />
+      <VarDeclaration Name="SD_3" Type="ANY" />
+      <VarDeclaration Name="SD_4" Type="ANY" />
+      <VarDeclaration Name="SD_5" Type="ANY" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
+      <VarDeclaration Name="RD_1" Type="ANY" Comment="Received Data" />
+      <VarDeclaration Name="RD_2" Type="ANY" />
+      <VarDeclaration Name="RD_3" Type="ANY" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

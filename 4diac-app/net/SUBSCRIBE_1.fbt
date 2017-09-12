@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd" >
+<FBType Name="SUBSCRIBE_1" Comment="Single-variable Subscriber" >
+  <Identification Standard="61499-1-3.2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-04-24" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-12-01" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="QI" />
+        <With Var="ID" />
+      </Event>
+      <Event Name="RSP" Comment="Service Response" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="IND" Comment="Service Indication" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="RD_1" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Connection Identifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
+      <VarDeclaration Name="RD_1" Type="ANY" Comment="Subscribed Data" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

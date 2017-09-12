@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_HYST_1">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-31" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+        <With Var="HIGH"/>
+        <With Var="LOW"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="WIN"/>
+        <With Var="Q"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="input value" Name="IN" Type="REAL"/>
+      <VarDeclaration Comment="upper threshold" Name="HIGH" Type="REAL"/>
+      <VarDeclaration Comment="lower threshold" Name="LOW" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="output" Name="Q" Type="BOOL"/>
+      <VarDeclaration Comment="shows that IN lies in between HIGH and LOW" Name="WIN" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="550.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="IF IN &lt; LOW THEN&#13;&#10;&#9;Q := FALSE;&#13;&#10;&#9;WIN := FALSE;&#13;&#10;ELSIF IN &gt; HIGH THEN&#13;&#10;&#9;Q := TRUE;&#13;&#10;&#9;WIN := FALSE;&#13;&#10;ELSE&#13;&#10;&#9;WIN := TRUE;&#13;&#10;END_IF;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

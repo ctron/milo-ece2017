@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Composite Function Block Type" Name="FB_FT_PI">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-07-15" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="In"/>
+        <With Var="KP"/>
+        <With Var="KI"/>
+        <With Var="Ilim_L"/>
+        <With Var="Ilim_H"/>
+        <With Var="rst"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="In"/>
+        <With Var="KP"/>
+        <With Var="KI"/>
+        <With Var="Ilim_L"/>
+        <With Var="Ilim_H"/>
+        <With Var="rst"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="Y"/>
+        <With Var="lim"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="Y"/>
+        <With Var="lim"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input value" Name="In" Type="REAL"/>
+      <VarDeclaration Comment="Amplification factor for proportional controller" InitialValue="1.0" Name="KP" Type="REAL"/>
+      <VarDeclaration Comment="Amplification factor for integrator" InitialValue="1.0" Name="KI" Type="REAL"/>
+      <VarDeclaration Comment="Minimal output value" InitialValue="-1E38" Name="Ilim_L" Type="REAL"/>
+      <VarDeclaration Comment="Maximal output value" InitialValue="1E38" Name="Ilim_H" Type="REAL"/>
+      <VarDeclaration Comment="Reset output" InitialValue="" Name="rst" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output value" Name="Y" Type="REAL"/>
+      <VarDeclaration Comment="Returns true if the limit is exceeded" Name="lim" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Name="FB_FT_INT" Type="FB_FT_INT" x="1045.0" y="760.0"/>
+    <FB Name="F_ADD" Type="FB_ADD_REAL" x="3135.0" y="760.0"/>
+    <FB Name="F_MUL" Type="F_MUL" x="2090.0" y="190.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="FB_FT_INT.Input" Source="In" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_INT.K" Source="KI" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_INT.rst" Source="rst" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_INT.Out_min" Source="Ilim_L" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_INT.Out_max" Source="Ilim_H" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="lim" Source="FB_FT_INT.lim" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL.IN1" Source="KP" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL.IN2" Source="In" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_ADD.IN1" Source="F_MUL.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_ADD.IN2" Source="FB_FT_INT.Output" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="Y" Source="F_ADD.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="FB_FT_INT.INIT" Source="INIT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="FB_FT_INT.INITO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_INT.REQ" Source="REQ" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_MUL.REQ" Source="FB_FT_INT.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="F_ADD.REQ" Source="F_MUL.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CNF" Source="F_ADD.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

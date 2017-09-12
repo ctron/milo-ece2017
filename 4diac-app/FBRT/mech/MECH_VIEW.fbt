@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="View of a Linear Mechanism" Name="MECH_VIEW">
+  <Identification Classification="View" Standard="61499-1"/>
+  <VersionInfo Author="JHC" Date="2002-04-05" Organization="Rockwell Automation" Remarks="Copied/Modified from CNV_VIEW" Version="0.0"/>
+  <CompilerInfo classdef="public class MECH_VIEW extends XABS_VIEW" header="package fb.rt.hmi;">
+    <Compiler Language="Java" Product="VisualAge" Vendor="IBM" Version="3.0"/>
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialize" Name="INIT">
+        <With Var="STYLE"/>
+        <With Var="WKPC"/>
+        <With Var="BKGD"/>
+        <With Var="LEN"/>
+        <With Var="DIA"/>
+        <With Var="DIR"/>
+      </Event>
+      <Event Comment="Update the display" Name="REQ">
+        <With Var="POS"/>
+        <With Var="STYLE"/>
+        <With Var="WKPC"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialized" Name="INITO"/>
+      <Event Comment="Display Updated" Name="CNF"/>
+      <Event Comment="Change in FAULT status" Name="IND">
+        <With Var="FAULT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Mechanism displacement" Name="POS" Type="UINT"/>
+      <VarDeclaration Comment="View style" Name="STYLE" Type="VSTYLE"/>
+      <VarDeclaration Comment="Foreground Color" Name="WKPC" Type="COLOR"/>
+      <VarDeclaration Comment="Background Color" Name="BKGD" Type="COLOR"/>
+      <VarDeclaration Comment="Length in Diameters" Name="LEN" Type="UINT"/>
+      <VarDeclaration Comment="Diameter" Name="DIA" Type="UINT"/>
+      <VarDeclaration Comment="Orientation:0=L/R,1=T/B,2=R/L,3=B/T" Name="DIR" Type="UINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="0=Normal,1=Fault" Name="FAULT" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

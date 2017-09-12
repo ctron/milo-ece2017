@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_CHOICE" Comment="Drop-down WSTRING input" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-05-23" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-12-15" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.hmi;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="CHOICES" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="OUT" />
+        <With Var="I" />
+      </Event>
+      <Event Name="IND" Comment="User changed choice or REQ serviced" >
+        <With Var="QO" />
+        <With Var="OUT" />
+        <With Var="I" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Event Qualifier" />
+      <VarDeclaration Name="CHOICES" Type="WSTRING" Comment="Comma-separated list of choices" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Qualifier" />
+      <VarDeclaration Name="OUT" Type="WSTRING" Comment="Current Selection" />
+      <VarDeclaration Name="I" Type="UINT" Comment="Index of Current Selection" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

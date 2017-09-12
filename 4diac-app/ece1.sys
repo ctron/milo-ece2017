@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE System SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<System Name="ece1">
+  <VersionInfo Author="Author" Organization="4DIAC-Consortium" Version="1.0"/>
+  <Application Name="app1">
+    <SubAppNetwork>
+      <FB Name="QX" Type="QX" x="5130.0" y="380.0">
+        <Parameter Name="QI" Value="1"/>
+        <Parameter Name="PARAMS" Value="125"/>
+      </FB>
+      <FB Name="E_CYCLE" Type="E_CYCLE" x="600.0" y="500.0">
+        <Parameter Name="DT" Value="T#1500ms"/>
+      </FB>
+      <FB Name="E_SWITCH" Type="E_SWITCH" x="2500.0" y="500.0"/>
+      <FB Name="E_SR" Type="E_SR" x="3420.0" y="475.0"/>
+      <FB Name="E_PERMIT" Type="E_PERMIT" x="1600.0" y="500.0">
+        <Parameter Name="PERMIT" Value="1"/>
+      </FB>
+      <DataConnections>
+        <Connection Destination="QX.OUT" Source="E_SR.Q" dx1="0.0" dx2="0.0" dy="0.0"/>
+        <Connection Destination="E_SWITCH.G" Source="E_SR.Q" dx1="0.0" dx2="0.0" dy="610.0"/>
+      </DataConnections>
+      <EventConnections>
+        <Connection Destination="QX.REQ" Source="E_SR.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+        <Connection Destination="E_SR.S" Source="E_SWITCH.EO0" dx1="0.0" dx2="0.0" dy="0.0"/>
+        <Connection Destination="E_SR.R" Source="E_SWITCH.EO1" dx1="225.0" dx2="0.0" dy="0.0"/>
+        <Connection Destination="E_CYCLE.START" Source="QX.INITO" dx1="0.0" dx2="0.0" dy="-570.0"/>
+        <Connection Destination="E_SWITCH.EI" Source="E_PERMIT.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+        <Connection Destination="E_PERMIT.EI" Source="E_CYCLE.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      </EventConnections>
+    </SubAppNetwork>
+  </Application>
+  <Application Name="app2">
+    <SubAppNetwork>
+      <FB Name="PUBLISH_1" Type="PUBLISH_1" x="3300.0" y="1800.0"/>
+      <FB Name="SUBSCRIBE_1" Type="SUBSCRIBE_1" x="640.0" y="1800.0">
+        <Parameter Name="QI" Value="1"/>
+        <Parameter Name="ID" Value="opc_ua[/Objects/1:FooBar]"/>
+      </FB>
+      <FB Name="STRING2STRING" Type="STRING2STRING" x="1875.0" y="1895.0"/>
+      <FB Name="PUBLISH_LED_STATE" Type="PUBLISH_1" x="3200.0" y="300.0">
+        <Parameter Name="QI" Value="1"/>
+        <Parameter Name="ID" Value="opc_ua[/Objects/1:LedState]"/>
+      </FB>
+      <FB Name="SUBSCRIBE_TIMER_STATE" Type="SUBSCRIBE_1" x="1200.0" y="300.0">
+        <Parameter Name="QI" Value="1"/>
+        <Parameter Name="ID" Value="opc_ua[/Objects/1:TimerState]"/>
+      </FB>
+      <DataConnections>
+        <Connection Destination="STRING2STRING.IN" Source="SUBSCRIBE_1.RD_1" dx1="0.0" dx2="0.0" dy="0.0"/>
+        <Connection Destination="PUBLISH_1.SD_1" Source="STRING2STRING.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      </DataConnections>
+      <EventConnections>
+        <Connection Destination="STRING2STRING.REQ" Source="SUBSCRIBE_1.IND" dx1="0.0" dx2="0.0" dy="0.0"/>
+        <Connection Destination="PUBLISH_1.REQ" Source="STRING2STRING.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      </EventConnections>
+    </SubAppNetwork>
+  </Application>
+  <Device Name="RaspberryPI" Type="RaspberryPI" x="1675.0" y="720.0">
+    <Attribute Name="Color" Value="211,67,103"/>
+    <Attribute Name="Profile" Value="HOLOBLOC"/>
+    <Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;"/>
+    <Resource Name="EMB_RES" Type="EMB_RES" x="0.0" y="0.0">
+      <FBNetwork>
+        <FB Name="QX" Type="QX" x="4845.0" y="285.0">
+          <Parameter Name="QI" Value="1"/>
+          <Parameter Name="PARAMS" Value="125"/>
+        </FB>
+        <FB Name="E_CYCLE" Type="E_CYCLE" x="500.0" y="500.0">
+          <Parameter Name="DT" Value="T#1500ms"/>
+        </FB>
+        <FB Name="E_SWITCH" Type="E_SWITCH" x="2280.0" y="1330.0"/>
+        <FB Name="E_SR" Type="E_SR" x="3420.0" y="475.0"/>
+        <FB Name="PUBLISH_LED_STATE" Type="PUBLISH_1" x="3900.0" y="1900.0">
+          <Parameter Name="QI" Value="1"/>
+          <Parameter Name="ID" Value="opc_ua[/Objects/1:LedState]"/>
+        </FB>
+        <FB Name="E_PERMIT" Type="E_PERMIT" x="1600.0" y="500.0">
+          <Parameter Name="PERMIT" Value="1"/>
+        </FB>
+        <FB Name="SUBSCRIBE_TIMER_STATE" Type="SUBSCRIBE_1" x="400.0" y="1200.0">
+          <Parameter Name="QI" Value="1"/>
+          <Parameter Name="ID" Value="opc_ua[/Objects/1:TimerState]"/>
+        </FB>
+        <DataConnections>
+          <Connection Destination="QX.OUT" Source="E_SR.Q" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="E_SWITCH.G" Source="E_SR.Q" dx1="0.0" dx2="0.0" dy="610.0"/>
+          <Connection Destination="PUBLISH_LED_STATE.SD_1" Source="E_SR.Q" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="E_PERMIT.PERMIT" Source="SUBSCRIBE_TIMER_STATE.RD_1" dx1="0.0" dx2="0.0" dy="0.0"/>
+        </DataConnections>
+        <EventConnections>
+          <Connection Destination="QX.REQ" Source="E_SR.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="E_CYCLE.START" Source="QX.INITO" dx1="0.0" dx2="0.0" dy="-570.0"/>
+          <Connection Destination="E_SR.S" Source="E_SWITCH.EO0" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="E_SR.R" Source="E_SWITCH.EO1" dx1="225.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="QX.INIT" Source="START.COLD" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="PUBLISH_LED_STATE.INIT" Source="START.COLD" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="PUBLISH_LED_STATE.REQ" Source="E_SR.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="E_PERMIT.EI" Source="E_CYCLE.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="E_SWITCH.EI" Source="E_PERMIT.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+          <Connection Destination="SUBSCRIBE_TIMER_STATE.INIT" Source="START.COLD" dx1="0.0" dx2="0.0" dy="0.0"/>
+        </EventConnections>
+      </FBNetwork>
+    </Resource>
+  </Device>
+  <Mapping From="app1.QX" To="RaspberryPI.EMB_RES.QX"/>
+  <Mapping From="app1.E_CYCLE" To="RaspberryPI.EMB_RES.E_CYCLE"/>
+  <Mapping From="app1.E_SWITCH" To="RaspberryPI.EMB_RES.E_SWITCH"/>
+  <Mapping From="app1.E_SR" To="RaspberryPI.EMB_RES.E_SR"/>
+  <Mapping From="app2.PUBLISH_LED_STATE" To="RaspberryPI.EMB_RES.PUBLISH_LED_STATE"/>
+  <Mapping From="app1.E_PERMIT" To="RaspberryPI.EMB_RES.E_PERMIT"/>
+  <Mapping From="app2.SUBSCRIBE_TIMER_STATE" To="RaspberryPI.EMB_RES.SUBSCRIBE_TIMER_STATE"/>
+</System>

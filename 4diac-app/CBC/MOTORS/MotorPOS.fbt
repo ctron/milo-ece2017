@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="MotorPOS">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2012-06-03" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Service Initialization" Name="INIT" Type="Event">
+        <With Var="PORT"/>
+        <With Var="QI"/>
+      </Event>
+      <Event Comment="move to position request" Name="REQ" Type="Event">
+        <With Var="POS"/>
+        <With Var="FREEZE"/>
+        <With Var="RELPOS"/>
+      </Event>
+      <Event Comment="Returns whether the motor has finished a move with specified position." Name="RSP" Type="Event">
+        <With Var="FREEZE"/>
+        <With Var="POS"/>
+      </Event>
+      <Event Name="STOP" Type="Event">
+        <With Var="QI"/>
+        <With Var="FREEZE"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="QO"/>
+        <With Var="CBC_RC"/>
+      </Event>
+      <Event Name="CNF" Type="Event">
+        <With Var="POS_OUT"/>
+        <With Var="CBC_RC"/>
+      </Event>
+      <Event Comment="specified position.reached" Name="IND" Type="Event">
+        <With Var="POS_OUT"/>
+      </Event>
+      <Event Name="STOPO" Type="Event">
+        <With Var="QO"/>
+        <With Var="POS_OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="input qualifer" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="Port the Motor is connected" Name="PORT" Type="UINT"/>
+      <VarDeclaration Comment="when turn off then true freeze; false coast" Name="FREEZE" Type="BOOL"/>
+      <VarDeclaration Comment="-1000 to 1000 ticks per second" Name="POS" Type="INT"/>
+      <VarDeclaration Comment="Relative position = true; Absolute position = false" InitialValue="" Name="RELPOS" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier; false if Port problem" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="POS_OUT" Type="INT"/>
+      <VarDeclaration Name="CBC_RC" Type="INT"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Service Interface Function Block Type" LeftInterface="APPLICATION" RightInterface="RESOURCE">
+    <ServiceSequence Name="normal_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO+" Interface="APPLICATION" Parameters="PARAMS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="unsuccessful_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_confirm">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ-" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_error">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_response">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD"/>
+        <OutputPrimitive Event="IND+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+      <ServiceTransaction>
+        <InputPrimitive Event="RSP" Interface="APPLICATION" Parameters="QI,SD"/>
+        <OutputPrimitive Event="response" Interface="RESOURCE" Parameters="QI,SD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD,QI=FALSE"/>
+        <OutputPrimitive Event="inhibited" Interface="RESOURCE"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="error_indication">
+      <ServiceTransaction>
+        <InputPrimitive Event="error" Interface="RESOURCE" Parameters="STATUS"/>
+        <OutputPrimitive Event="IND-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="application_initiated_termination">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT-" Interface="APPLICATION"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="resource_initiated_termination">
+      <ServiceTransaction>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

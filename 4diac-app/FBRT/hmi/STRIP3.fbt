@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="STRIP3" Comment="3-Pen Strip Chart Recorder" >
+  <Identification Standard="61499-1" Classification="Service Interface" ApplicationDomain="Human Interface" Function="Recorder" Type="Strip Chart" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2004-09-01" Remarks="Deleted QI, QO, MAX_SCALE, MIN_SCALE; made inputs UINT{0..100}." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-04-25" />
+  <CompilerInfo header="package fb.rt.hmi;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" >
+        <With Var="COLORS" />
+        <With Var="BKGD" />
+        <With Var="SIZE" />
+        <With Var="DX" />
+      </Event>
+      <Event Name="REQ" >
+        <With Var="PEN1" />
+        <With Var="PEN2" />
+        <With Var="PEN3" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" >
+      </Event>
+      <Event Name="CNF" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="PEN1" Type="UINT" Comment="Pen 1 Position, 0-100%" />
+      <VarDeclaration Name="PEN2" Type="UINT" Comment="Pen 2 Position, 0-100%" />
+      <VarDeclaration Name="PEN3" Type="UINT" Comment="Pen 3 Position, 0-100%" />
+      <VarDeclaration Name="COLORS" Type="COLOR" ArraySize="3" InitialValue="[red,yellow,green]" Comment="PEN1,2,3 Colors" />
+      <VarDeclaration Name="BKGD" Type="COLOR" InitialValue="lightGray" Comment="Background Color" />
+      <VarDeclaration Name="SIZE" Type="UINT" ArraySize="2" InitialValue="[200,200]" Comment="Width,Height" />
+      <VarDeclaration Name="DX" Type="UINT" InitialValue="10" Comment="x-increment size" />
+    </InputVars>
+  </InterfaceList>
+</FBType>

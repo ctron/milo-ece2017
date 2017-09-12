@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="OUT_BOOL" Comment="Boolean Output Color Box" >
+  <Identification Standard="61499-1" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-04-14" Remarks="First XML version." />
+  <CompilerInfo header="package fb.rt.hmi;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="LABEL" />
+        <With Var="IN" />
+        <With Var="C0" />
+        <With Var="C1" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Event qualifier" />
+      <VarDeclaration Name="LABEL" Type="WSTRING" Comment="Label" />
+      <VarDeclaration Name="IN" Type="BOOL" Comment="Input value" />
+      <VarDeclaration Name="C0" Type="COLOR" InitialValue="COLOR#white" Comment="Color when IN=0" />
+      <VarDeclaration Name="C1" Type="COLOR" InitialValue="COLOR#green" Comment="Color when IN=1" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork >
+    <FB Name="SEL" Type="FB_SEL_COLOR" x="241.1765" y="11.7647" />
+    <FB Name="BOX" Type="OUT_COLOR" x="1088.2352" y="11.7647" />
+    <EventConnections>
+      <Connection Source="INIT" Destination="BOX.INIT" dx1="982.3529" />
+      <Connection Source="BOX.INITO" Destination="INITO" dx1="1617.647" />
+      <Connection Source="REQ" Destination="SEL.REQ" dx1="129.4118" />
+      <Connection Source="SEL.CNF" Destination="BOX.REQ" dx1="76.4706" />
+      <Connection Source="BOX.CNF" Destination="CNF" dx1="1594.1177" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="QI" Destination="BOX.QI" dx1="1005.8823" />
+      <Connection Source="BOX.QO" Destination="QO" dx1="1582.3529" />
+      <Connection Source="IN" Destination="SEL.G" dx1="164.7059" />
+      <Connection Source="C0" Destination="SEL.IN0" dx1="158.8235" />
+      <Connection Source="C1" Destination="SEL.IN1" dx1="158.8235" />
+      <Connection Source="LABEL" Destination="BOX.LABEL" dx1="941.1765" />
+      <Connection Source="SEL.OUT" Destination="BOX.IN" dx1="70.5882" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

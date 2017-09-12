@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="OUT_TEXT_S" Comment="STRING Output to a TextArea-see OUT_TEXT" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-11-26" Remarks="Copied/modified from OUT_TEXT." />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" >
+        <With Var="QI" />
+        <With Var="IVAL" />
+        <With Var="SIZE" />
+      </Event>
+      <Event Name="REQ" Comment="Append IN to the TextArea" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="CNF" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" />
+      <VarDeclaration Name="SIZE" Type="UINT" ArraySize="2" InitialValue="[10,20]" Comment="Rows,Columns" />
+      <VarDeclaration Name="IN" Type="STRING" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

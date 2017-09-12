@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_INTEGRATE">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-07-12" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="X"/>
+        <With Var="K"/>
+        <With Var="reset"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="X"/>
+        <With Var="K"/>
+        <With Var="reset"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="Y_OUT"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="Y_OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input value on x-axis" InitialValue="" Name="X" Type="REAL"/>
+      <VarDeclaration Comment="Factor" InitialValue="1.0" Name="K" Type="REAL"/>
+      <VarDeclaration Comment="If reset is true Y_OUT is 0" Name="reset" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output value on y-axis" Name="Y_OUT" Type="REAL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <InternalVars>
+      <VarDeclaration Comment="The last value on x-axis" InitialValue="" Name="X_last" Type="REAL"/>
+      <VarDeclaration Comment="The last time" InitialValue="" Name="last" Type="DWORD"/>
+      <VarDeclaration Comment="The time in milliseconds" InitialValue="" Name="tx" Type="DWORD"/>
+      <VarDeclaration Comment="The value on y-axis" InitialValue="" Name="Y_intern" Type="REAL"/>
+    </InternalVars>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Initialization" Name="INIT" x="920.0" y="140.0">
+        <ECAction Algorithm="INIT" Output="INITO"/>
+      </ECState>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="INIT" Destination="INIT" Source="START" x="920.0" y="425.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="INIT" x="550.0" y="140.0"/>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="550.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="INIT">
+      <ST Text="X_last := X;"/>
+    </Algorithm>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="IF reset THEN&#13;&#10;&#9;Y_intern := 0.0;&#13;&#10;ELSE&#13;&#10;&#9;tx := T_PLC_MS();&#13;&#10;&#9;Y_intern := (X + X_last) * 0.5E-3 * DWORD_TO_REAL(tx - last) * K +  Y_intern;&#13;&#10;&#9;X_last := X;&#13;&#10;&#9;last := tx;&#13;&#10;END_IF;&#13;&#10;&#13;&#10;Y_OUT := Y_intern;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

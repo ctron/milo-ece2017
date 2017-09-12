@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Composite Function Block Type" Name="FB_FT_IMP">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-27" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="T"/>
+        <With Var="K"/>
+        <With Var="IN"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+        <With Var="T"/>
+        <With Var="K"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="input signal" Name="IN" Type="REAL"/>
+      <VarDeclaration Comment="time constant" Name="T" Type="TIME"/>
+      <VarDeclaration Comment="multiplier" InitialValue="1.0" Name="K" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="high pass with time constant T" Name="OUT" Type="REAL"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Name="FB_FT_PT1" Type="FB_FT_PT1" x="985.0" y="1000.0"/>
+    <FB Name="FB_MUL_REAL" Type="FB_MUL_REAL" x="1900.0" y="2090.0"/>
+    <FB Name="FB_SUB_REAL" Type="FB_SUB_REAL" x="1150.0" y="2075.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="FB_FT_PT1.IN" Source="IN" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PT1.T" Source="T" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_SUB_REAL.IN1" Source="IN" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_SUB_REAL.IN2" Source="FB_FT_PT1.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_MUL_REAL.IN1" Source="FB_SUB_REAL.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_MUL_REAL.IN2" Source="K" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="OUT" Source="FB_MUL_REAL.OUT" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="FB_FT_PT1.INIT" Source="INIT" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="FB_FT_PT1.INITO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_FT_PT1.REQ" Source="REQ" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_SUB_REAL.REQ" Source="FB_FT_PT1.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="FB_MUL_REAL.REQ" Source="FB_SUB_REAL.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CNF" Source="FB_MUL_REAL.CNF" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="FB_BAR" Comment="An orientable single bar graph" >
+  <Identification Standard="61499-1" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.3" Author="JHC" Date="2004-08-20" Remarks="Corrected documentation of output." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2004-01-20" Remarks="Corrected documentation of STYLE input." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2000-04-28" Remarks="Added STYLE input" />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*;" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version="1.3.1" />
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" >
+        <With Var="FGD" />
+        <With Var="BKGD" />
+        <With Var="W" />
+        <With Var="H" />
+        <With Var="DIR" />
+        <With Var="STYLE" />
+      </Event>
+      <Event Name="REQ" Comment="Update the bar" >
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+      </Event>
+      <Event Name="CNF" Comment="REQ Confirmation" >
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="IN" Type="UINT" Comment="Value to display" />
+      <VarDeclaration Name="FGD" Type="COLOR" InitialValue="red" Comment="Foreground Color" />
+      <VarDeclaration Name="BKGD" Type="COLOR" InitialValue="blue" Comment="Background Color" />
+      <VarDeclaration Name="W" Type="UINT" Comment="Bar width" />
+      <VarDeclaration Name="H" Type="UINT" Comment="Bar height" />
+      <VarDeclaration Name="DIR" Type="UINT" Comment="Orientation:0=L/R,1=T/B,2=R/L,3=B/T" />
+      <VarDeclaration Name="STYLE" Type="UINT" Comment="Style:0=BAR,1=SLIDER" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="OUT" Type="UINT" Comment="Displayed value,limited from 0% to 100%" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

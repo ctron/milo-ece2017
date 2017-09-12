@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd" >
+<FBType Name="FB_SLIDER" Comment="A slider input" >
+  <Identification Standard="61499-1" ApplicationDomain="GUI" Function="Slider input" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2001-03-04" Remarks="Udated documentation." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2000-04-27" Remarks="Corrected IVAL handling." />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*; import java.awt.event.*;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Request" >
+        <With Var="IVAL" />
+        <With Var="FGD" />
+        <With Var="BKGD" />
+        <With Var="W" />
+        <With Var="H" />
+        <With Var="DIR" />
+      </Event>
+      <Event Name="REQ" Comment="Read the current value" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" Comment="REQ Confirmation or change of state" >
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="IVAL" Type="UINT" Comment="Initial slider position" />
+      <VarDeclaration Name="FGD" Type="COLOR" InitialValue="red" Comment="Foreground Color" />
+      <VarDeclaration Name="BKGD" Type="COLOR" InitialValue="blue" Comment="Background Color" />
+      <VarDeclaration Name="W" Type="UINT" InitialValue="75" Comment="Bar width" />
+      <VarDeclaration Name="H" Type="UINT" InitialValue="20" Comment="Bar height" />
+      <VarDeclaration Name="DIR" Type="UINT" Comment="Orientation:0=L/R,1=T/B,2=R/L,3=B/T" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="OUT" Type="UINT" Comment="Slider position{0..100}" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="component" LeftInterface="FB_SLIDER" >
+    <ServiceSequence Name="initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_SLIDER" Event="INIT" Parameters="IVAL,FGD,BKGD,W,H,DIR" />
+        <OutputPrimitive Interface="component" Event="init" />
+        <OutputPrimitive Interface="FB_SLIDER" Event="INITO" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="read_value" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_SLIDER" Event="REQ" />
+        <OutputPrimitive Interface="component" Event="getValue" />
+        <OutputPrimitive Interface="FB_SLIDER" Event="CNF" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="update" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="component" Event="mouseEvent" />
+        <OutputPrimitive Interface="FB_SLIDER" Event="IND" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

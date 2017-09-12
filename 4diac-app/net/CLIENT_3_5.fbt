@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="CLIENT_3_5" Comment="3-Input,5-Output Client Interface" >
+  <Identification Standard="61499-1" Classification="Communications" Function="Client" Type="3-input, 4-output" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2003-10-01" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="QI" />
+        <With Var="ID" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+        <With Var="QI" />
+        <With Var="SD_1" />
+        <With Var="SD_2" />
+        <With Var="SD_3" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="RD_1" />
+        <With Var="RD_2" />
+        <With Var="RD_3" />
+        <With Var="RD_4" />
+        <With Var="RD_5" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Connection Identifier" />
+      <VarDeclaration Name="SD_1" Type="ANY" Comment="Data to Send" />
+      <VarDeclaration Name="SD_2" Type="ANY" />
+      <VarDeclaration Name="SD_3" Type="ANY" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
+      <VarDeclaration Name="RD_1" Type="ANY" Comment="Received Data" />
+      <VarDeclaration Name="RD_2" Type="ANY" />
+      <VarDeclaration Name="RD_3" Type="ANY" />
+      <VarDeclaration Name="RD_4" Type="ANY" />
+      <VarDeclaration Name="RD_5" Type="ANY" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

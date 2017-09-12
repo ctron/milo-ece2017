@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="PUBL_4" Comment="Four-Variable Local Group Publisher" >
+  <Identification Standard="61499-1" Classification="Communications" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-02" Remarks="Optimized." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-10-02" Remarks="Copied/modified from PUBLISH_4" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="ID" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+        <With Var="SD_1" />
+        <With Var="SD_2" />
+        <With Var="SD_3" />
+        <With Var="SD_4" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Local Group Name-Default is FB Instance Name" />
+      <VarDeclaration Name="SD_1" Type="ANY" Comment="Data to Send" />
+      <VarDeclaration Name="SD_2" Type="ANY" Comment="Data to Send" />
+      <VarDeclaration Name="SD_3" Type="ANY" Comment="Data to Send" />
+      <VarDeclaration Name="SD_4" Type="ANY" Comment="Data to Send" />
+    </InputVars>
+  </InterfaceList>
+</FBType>

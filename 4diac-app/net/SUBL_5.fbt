@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="SUBL_5" Comment="Five-variable Local Group Subscriber" >
+  <Identification Standard="61499-1" Classification="Communications" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2002-05-22" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="ID" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+      </Event>
+      <Event Name="IND" Comment="Service Indication" >
+        <With Var="RD_1" />
+        <With Var="RD_2" />
+        <With Var="RD_3" />
+        <With Var="RD_4" />
+        <With Var="RD_5" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Local Group Name-Default is FB Instance Name" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="RD_1" Type="ANY" Comment="Subscribed Data" />
+      <VarDeclaration Name="RD_2" Type="ANY" />
+      <VarDeclaration Name="RD_3" Type="ANY" />
+      <VarDeclaration Name="RD_4" Type="ANY" />
+      <VarDeclaration Name="RD_5" Type="ANY" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

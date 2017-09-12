@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="OUT_ANY" Comment="Data output to TextField" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-05-31" />
+  <CompilerInfo header="package fb.rt.hmi;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="W" />
+        <With Var="TYPE" />
+        <With Var="IVAL" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Input event qualifier" />
+      <VarDeclaration Name="IN" Type="ANY" Comment="Output value to convert" />
+      <VarDeclaration Name="W" Type="UINT" InitialValue="10" Comment="TextField width in chars" />
+      <VarDeclaration Name="TYPE" Type="WSTRING" InitialValue="&#34;ANY&#34;" Comment="Data type name" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" Comment="Initial value" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="TextField" LeftInterface="OUT_ANY" >
+    <ServiceSequence Name="normal_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_ANY" Event="INIT+" Parameters="IVAL" />
+        <OutputPrimitive Interface="TextField" Event="initialize" Parameters="IVAL" />
+        <OutputPrimitive Interface="OUT_ANY" Event="INITO+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="initialization_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_ANY" Event="INIT-" />
+        <OutputPrimitive Interface="OUT_ANY" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="normal_data_transfer" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_ANY" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="TextField" Event="setText" Parameters="IN" />
+        <OutputPrimitive Interface="OUT_ANY" Event="CNF+" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="data_transfer_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="OUT_ANY" Event="REQ-" />
+        <OutputPrimitive Interface="OUT_ANY" Event="CNF-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

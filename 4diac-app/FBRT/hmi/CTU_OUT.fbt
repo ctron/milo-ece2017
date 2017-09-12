@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="CTU_OUT" Comment="E_CTU with display and label" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2004-08-07" />
+  <CompilerInfo header="package fb.rt.swing;" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version="1.4.2" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="R" Comment="Reset Counter and Initialize Display" >
+        <With Var="PV" />
+        <With Var="LBL" />
+      </Event>
+      <Event Name="CU" Comment="Count Up" >
+        <With Var="PV" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="RO" Comment="Counter Reset" >
+        <With Var="CV" />
+        <With Var="Q" />
+      </Event>
+      <Event Name="CUO" Comment="Count Up Output Event" >
+        <With Var="CV" />
+        <With Var="Q" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="PV" Type="UINT" Comment="Preset Value" />
+      <VarDeclaration Name="LBL" Type="WSTRING" Comment="Label" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="Q" Type="BOOL" Comment="CV>=PV" />
+      <VarDeclaration Name="CV" Type="UINT" Comment="Counter Value" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork >
+    <FB Name="CTR" Type="E_CTU" x="372.2222" y="11.111111" />
+    <FB Name="OUT" Type="OUT_ANY" x="1044.4445" y="122.22221" >
+      <Parameter Name="IVAL" Value="&#34;0&#34;" />
+      <Parameter Name="TYPE" Value="&#34;UINT&#34;" />
+      <Parameter Name="W" Value="5" />
+    </FB>
+    <FB Name="LABEL" Type="FB_LABEL" x="1605.5555" y="11.111111" />
+    <EventConnections>
+      <Connection Source="CTR.RO" Destination="OUT.INIT" dx1="88.888885" />
+      <Connection Source="CTR.CUO" Destination="OUT.REQ" dx1="211.1111" />
+      <Connection Source="R" Destination="CTR.R" dx1="300.0" />
+      <Connection Source="CU" Destination="CTR.CU" dx1="283.3333" />
+      <Connection Source="OUT.CNF" Destination="CUO" dx1="1466.6666" />
+      <Connection Source="OUT.INITO" Destination="LABEL.INIT" dx1="27.777777" />
+      <Connection Source="LABEL.INITO" Destination="RO" dx1="2005.5554" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="CTR.CV" Destination="OUT.IN" dx1="227.77777" />
+      <Connection Source="CTR.CV" Destination="CV" dx1="705.55554" />
+      <Connection Source="PV" Destination="CTR.PV" dx1="283.3333" />
+      <Connection Source="CTR.Q" Destination="Q" dx1="688.88885" />
+      <Connection Source="LBL" Destination="LABEL.LABEL" dx1="1500.0" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

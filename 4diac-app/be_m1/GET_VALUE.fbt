@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Reads the value from the specified input channel" Name="GET_VALUE">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-09-22" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="INIT" Type="Event">
+        <With Var="MOD_NB"/>
+      </Event>
+      <Event Comment="" Name="REQ" Type="Event">
+        <With Var="CHAN_NB"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="RET_CODE"/>
+      </Event>
+      <Event Comment="Confirmation of Requested Service" Name="CNF" Type="Event">
+        <With Var="RET_CODE"/>
+        <With Var="VALUE"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Module Number" InitialValue="" Name="MOD_NB" Type="INT"/>
+      <VarDeclaration Comment="Channel Number" InitialValue="" Name="CHAN_NB" Type="INT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Return Code" InitialValue="" Name="RET_CODE" Type="INT"/>
+      <VarDeclaration Comment="Value" InitialValue="" Name="VALUE" Type="SINT"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Reads the value from the specified input channel" LeftInterface="APPLICATION" RightInterface="RESOURCE">
+    <ServiceSequence Name="normal_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO+" Interface="APPLICATION" Parameters="PARAMS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="unsuccessful_establishment">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT+" Interface="APPLICATION" Parameters="PARAMS"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_confirm">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ-" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_error">
+      <ServiceTransaction>
+        <InputPrimitive Event="REQ+" Interface="APPLICATION" Parameters="SD"/>
+        <OutputPrimitive Event="CNF-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_response">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD"/>
+        <OutputPrimitive Event="IND+" Interface="APPLICATION" Parameters="RD"/>
+      </ServiceTransaction>
+      <ServiceTransaction>
+        <InputPrimitive Event="RSP" Interface="APPLICATION" Parameters="QI,SD"/>
+        <OutputPrimitive Event="response" Interface="RESOURCE" Parameters="QI,SD"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_inhibited">
+      <ServiceTransaction>
+        <InputPrimitive Event="indicate" Interface="RESOURCE" Parameters="RD,QI=FALSE"/>
+        <OutputPrimitive Event="inhibited" Interface="RESOURCE"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="error_indication">
+      <ServiceTransaction>
+        <InputPrimitive Event="error" Interface="RESOURCE" Parameters="STATUS"/>
+        <OutputPrimitive Event="IND-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="application_initiated_termination">
+      <ServiceTransaction>
+        <InputPrimitive Event="INIT-" Interface="APPLICATION"/>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="resource_initiated_termination">
+      <ServiceTransaction>
+        <OutputPrimitive Event="INITO-" Interface="APPLICATION" Parameters="STATUS"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

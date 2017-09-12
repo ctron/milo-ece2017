@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="TestStruct2TestStruct" Comment="Basic Function Block Type" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="4DIAC" Version="0.9" Author="IH" Date="2012-01-10" />
+  <CompilerInfo header="package fb.rt.test; import fb.rt.test.TestStruct;" >
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="REQ" Comment="Normal Execution Request" >
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="CNF" Comment="Execution Confirmation" >
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="IN" Type="TestStruct" Comment="Input" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="OUT" Type="TestStruct" Comment="Output" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="START" Comment="Initial State" x="555.55554" y="427.77777" >
+      </ECState>
+      <ECState Name="REQ" Comment="Normal execution" x="216.66666" y="755.55554" >
+        <ECAction Algorithm="REQ" Output="CNF" />
+      </ECState>
+      <ECTransition Source="START" Destination="REQ" Condition="REQ" x="555.55554" y="600.0" />
+      <ECTransition Source="REQ" Destination="START" Condition="1" x="216.66666" y="427.77777" />
+    </ECC>
+  <Algorithm Name="REQ" Comment="Normally executed algorithm" >
+    <Other Language="Java" Text="OUT.FOO.value=IN.FOO.value;
+OUT.BAR.value=IN.BAR.value;" />
+  </Algorithm>
+  </BasicFB>
+</FBType>

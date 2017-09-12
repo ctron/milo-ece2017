@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_ENUM" Comment="Enumerated data input from drop-down list" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.3" Author="JHC" Date="2004-06-21" Remarks="Made composite, Swing implementation." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-06-08" Remarks="XML version, concrete" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-11-20" Remarks="Original (Java) version, abstract" />
+  <CompilerInfo header="package fb.rt.swing;" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version="1.4.2" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" >
+        <With Var="QI" />
+        <With Var="TYPE" />
+      </Event>
+      <Event Name="REQ" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" />
+      <VarDeclaration Name="TYPE" Type="WSTRING" InitialValue="&#34;ANY&#34;" Comment="Data type name,must be enumerated type" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="1=OK,0=Error" />
+      <VarDeclaration Name="OUT" Type="ANY" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork >
+    <FB Name="CHOICE" Type="IN_CHOICE" x="1083.3333" y="11.111111" />
+    <FB Name="CTL" Type="IN_ENUM_CTL" x="249.99998" y="11.111111" />
+    <EventConnections>
+      <Connection Source="INIT" Destination="CTL.INIT" dx1="144.44444" />
+      <Connection Source="CTL.INITO" Destination="CHOICE.INIT" dx1="55.555553" />
+      <Connection Source="CHOICE.INITO" Destination="INITO" dx1="1633.3333" />
+      <Connection Source="REQ" Destination="CHOICE.REQ" dx1="972.22217" />
+      <Connection Source="CHOICE.IND" Destination="CTL.REQ" dx1="205.55554" dx2="166.66666" dy="750.0" />
+      <Connection Source="CTL.CNF" Destination="IND" dx1="800.0" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="QI" Destination="CTL.QI" dx1="166.66666" />
+      <Connection Source="QI" Destination="CHOICE.QI" dx1="999.99994" />
+      <Connection Source="CHOICE.QO" Destination="QO" dx1="1600.0" />
+      <Connection Source="TYPE" Destination="CTL.TYPE" dx1="122.22221" />
+      <Connection Source="CTL.CHOICES" Destination="CHOICE.CHOICES" dx1="266.66666" />
+      <Connection Source="CHOICE.I" Destination="CTL.I" dx1="44.444443" dx2="44.444443" dy="127.77777" />
+      <Connection Source="CTL.OUT" Destination="OUT" dx1="816.6666" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

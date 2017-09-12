@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="F_BAND_B">
+  <Identification Classification="Control Modules" Description="BAND_B hides at the input areas 0..255 the areas 0..B and 255-B.. 255, in this areas the output is 0 respectively 255." Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-23" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="B"/>
+        <With Var="X"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="input value" Name="X" Type="BYTE"/>
+      <VarDeclaration Comment="limit area" Name="B" Type="BYTE"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="output value" Name="OUT" Type="BYTE"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="550.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="IF X &lt; B THEN&#13;&#10;&#9;OUT := 0;&#13;&#10;ELSIF X &gt; 255-B THEN&#13;&#10;&#9;OUT := 255;&#13;&#10;ELSE&#13;&#10;&#9;OUT := X;&#13;&#10;END_IF;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

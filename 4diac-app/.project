@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ece1</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+		<nature>org.fordiac.systemManagement.DistributedNature</nature>
+		<nature>org.fordiac.systemmanagement.nature.IEC61499</nature>
+	</natures>
+</projectDescription>

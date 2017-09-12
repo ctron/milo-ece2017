@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_SR" Comment="Event-driven bistable" >
+  <Identification Standard="61499-1-A.1" Classification="Event Processing" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2003-12-30" Remarks="Updated for 61499-1 CDV." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-08-16" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-04-11" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="S" Comment="Set Event" >
+      </Event>
+      <Event Name="R" Comment="Reset Event" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Output Event" >
+        <With Var="Q" />
+      </Event>
+    </EventOutputs>
+    <OutputVars>
+      <VarDeclaration Name="Q" Type="BOOL" Comment="Current Output State" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="Q0" Comment="Q is FALSE initially" x="117.64706" y="129.41176" >
+      </ECState>
+      <ECState Name="RESET" Comment="Reset Q and issue EO" x="500.0" y="529.41174" >
+        <ECAction Algorithm="RESET" Output="EO" />
+      </ECState>
+      <ECState Name="SET" Comment="Set Q and issue EO" x="488.2353" y="129.41176" >
+        <ECAction Algorithm="SET" Output="EO" />
+      </ECState>
+      <ECTransition Source="Q0" Destination="SET" Condition="S" x="270.58823" y="129.41176" />
+      <ECTransition Source="SET" Destination="RESET" Condition="R" x="500.0" y="311.7647" />
+      <ECTransition Source="RESET" Destination="SET" Condition="S" x="694.1176" y="335.2941" />
+    </ECC>
+  <Algorithm Name="SET" Comment="Set Q" >
+    <ST Text="Q:=TRUE;&#10;" />
+  </Algorithm>
+  <Algorithm Name="RESET" Comment="Reset Q" >
+    <ST Text="Q:=FALSE;&#10;" />
+  </Algorithm>
+  </BasicFB>
+</FBType>

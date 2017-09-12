@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Motion/Fault Model of a Bidirectional Linear Mechanism (Externally Clocked)" Name="MECH2_MDL">
+  <Identification ApplicationDomain="Simulation" Classification="Model" Function="Bidirectional Motion" Standard="61499-1"/>
+  <VersionInfo Author="JHC" Date="2005-06-01" Organization="Holobloc Inc" Remarks="Recompiled with new emitter." Version="0.1"/>
+  <VersionInfo Author="JHC" Date="2004-09-25" Organization="Rockwell Automation" Remarks="Derived from MECH2_MDL." Version="0.0"/>
+  <CompilerInfo header="package fb.rt.mva; ">
+    <Compiler Language="Java" Product="Jikes" Vendor="IBM" Version="1.06"/>
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="External Clock Event" Name="CLK">
+        <With Var="FAULT"/>
+        <With Var="FWD"/>
+        <With Var="REV"/>
+        <With Var="VF"/>
+        <With Var="VR"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Position Changed" Name="INDP">
+        <With Var="POS"/>
+      </Event>
+      <Event Comment="Sensor Changed" Name="INDS">
+        <With Var="HOME"/>
+        <With Var="END"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="0=Enable,1=Simulate Fault" Name="FAULT" Type="BOOL"/>
+      <VarDeclaration Comment="Move Forward at VF" Name="FWD" Type="BOOL"/>
+      <VarDeclaration Comment="Move Back at VR" Name="REV" Type="BOOL"/>
+      <VarDeclaration Comment="Forward speed in % Full Scale per CLK event" Name="VF" Type="UINT"/>
+      <VarDeclaration Comment="Reverse speed in %FS per CLK event" Name="VR" Type="UINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Position,{0..100}percent" Name="POS" Type="UINT"/>
+      <VarDeclaration Comment="HOME position limit switch with hysteresis" Name="HOME" Type="BOOL"/>
+      <VarDeclaration Comment="END position limit switch with hysteresis" Name="END" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC/>
+    <Algorithm Name="CLK">
+      <Other Language="Java" Text="if(FAULT.value) return;&#10;int speed = FWD.value? VF.value : 0;&#10;if(REV.value) speed -= VR.value;&#10;if(speed==0) return;&#10;if(END.value&amp;&amp;(speed&gt;0)) return;&#10;if(HOME.value&amp;&amp;(speed&lt;0)) return;&#10;POS.value = Math.max(0,Math.min(100,POS.value+speed));&#10;INDP.serviceEvent(this);&#10;boolean oldhome = HOME.value;&#10;boolean oldend = END.value;&#10;HOME.value = (POS.value==0);&#10;END.value = (POS.value==100);&#10;if((HOME.value!=oldhome)||(END.value != oldend)) INDS.serviceEvent(this);&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

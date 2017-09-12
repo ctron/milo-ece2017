@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_HYST_3">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-31" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+        <With Var="VAL1"/>
+        <With Var="HYS"/>
+        <With Var="VAL2"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="WIN"/>
+        <With Var="Q1"/>
+        <With Var="Q2"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="input value" Name="IN" Type="REAL"/>
+      <VarDeclaration Comment="width of the hysteresis" Name="HYS" Type="REAL"/>
+      <VarDeclaration Comment="mean of the hysteresis 1" Name="VAL1" Type="REAL"/>
+      <VarDeclaration Comment="mean of hysteresis 2" Name="VAL2" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="output" Name="Q1" Type="BOOL"/>
+      <VarDeclaration Comment="output 2" Name="Q2" Type="BOOL"/>
+      <VarDeclaration Comment="shows that IN lies in the window" Name="WIN" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="550.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="VAR&#13;&#10;&#9;X: REAL;&#13;&#10;END_VAR&#13;&#10;&#13;&#10;X := HYS * 0.5;&#13;&#10;&#13;&#10;IF IN &lt; VAL1 - X THEN&#13;&#10;&#9;Q1 := TRUE;&#13;&#10;ELSIF IN &gt; VAL1 + X THEN&#13;&#10;&#9;Q1 := FALSE;&#13;&#10;END_IF;&#13;&#10;&#13;&#10;IF IN &lt; VAL2 - X THEN&#13;&#10;&#9;Q2 := FALSE;&#13;&#10;ELSIF IN &gt; VAL2 + X THEN&#13;&#10;&#9;Q2 := TRUE;&#13;&#10;END_IF;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_ANY" Comment="Data input from TextField" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI initial value = true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-05-31" />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" >
+        <With Var="QI" />
+        <With Var="W" />
+        <With Var="TYPE" />
+        <With Var="IVAL" />
+      </Event>
+      <Event Name="REQ" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" />
+      <VarDeclaration Name="W" Type="UINT" InitialValue="10" Comment="TextField width in chars" />
+      <VarDeclaration Name="TYPE" Type="WSTRING" InitialValue="&#34;ANY&#34;" Comment="Data type name" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="1=OK,0=Error" />
+      <VarDeclaration Name="OUT" Type="ANY" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="TextField" LeftInterface="IN_ANY" >
+    <ServiceSequence Name="normal_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_ANY" Event="INIT+" Parameters="IVAL" />
+        <OutputPrimitive Interface="TextField" Event="initialize" Parameters="IVAL" />
+        <OutputPrimitive Interface="OUT" Event="initialize" Parameters="IVAL" />
+        <OutputPrimitive Interface="IN_ANY" Event="INITO+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="initialization_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_ANY" Event="INIT-" />
+        <OutputPrimitive Interface="IN_ANY" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="data_request" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_ANY" Event="REQ+" />
+        <OutputPrimitive Interface="TextField" Event="getText" />
+        <OutputPrimitive Interface="OUT" Event="initialize" Parameters="text" />
+        <OutputPrimitive Interface="IN_ANY" Event="IND+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="data_request_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_ANY" Event="REQ+" />
+        <OutputPrimitive Interface="TextField" Event="getText" />
+        <OutputPrimitive Interface="TextField" Event="setText" Parameters="errorMessage" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="data_request_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="IN_ANY" Event="REQ-" />
+        <OutputPrimitive Interface="IN_ANY" Event="IND-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="user_data_entered" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="TextField" Event="dataEntered" />
+        <OutputPrimitive Interface="OUT" Event="initialize" Parameters="text" />
+        <OutputPrimitive Interface="IN_ANY" Event="IND+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="user_data_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="TextField" Event="dataEntered" />
+        <OutputPrimitive Interface="TextField" Event="setText" Parameters="errorMessage" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

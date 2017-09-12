@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="CHOICE_TBL" Comment="Table CHOICE input" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-04-07" />
+  <CompilerInfo header="package fb.rt.hmi; import fb.rt.math.*;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Table Initialization" >
+        <With Var="KEYS" />
+        <With Var="VALUES" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+      </Event>
+      <Event Name="IND" Comment="New Choice" >
+        <With Var="VALUE" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="KEYS" Type="WSTRING" Comment="Comma-separated List of Keys" />
+      <VarDeclaration Name="VALUES" Type="WSTRING" Comment="Comma-separated List of Values" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="VALUE" Type="WSTRING" Comment="Value Corresponding to Chosen Key" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork >
+    <FB Name="KEY" Type="IN_CHOICE" x="277.77777" y="11.111111" >
+      <Parameter Name="QI" Value="1" />
+    </FB>
+    <FB Name="TABLE" Type="N_TBL" x="1155.5555" y="122.22221" />
+    <EventConnections>
+      <Connection Source="INIT" Destination="KEY.INIT" dx1="172.22221" />
+      <Connection Source="KEY.INITO" Destination="INITO" dx1="827.7778" />
+      <Connection Source="KEY.IND" Destination="TABLE.REQ" dx1="105.55555" />
+      <Connection Source="TABLE.CNF" Destination="IND" dx1="1527.7777" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="KEYS" Destination="KEY.CHOICES" dx1="150.0" />
+      <Connection Source="VALUES" Destination="TABLE.VALUES" dx1="988.88885" />
+      <Connection Source="KEY.I" Destination="TABLE.N" dx1="88.888885" />
+      <Connection Source="TABLE.VALUE" Destination="VALUE" dx1="1577.7777" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="DWORD2DWORD" Comment="Basic Function Block Type" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="PROFACTOR GmbH" Version="1.0" Author="TS" Date="2006-11-14" />
+  <CompilerInfo header="package fb.rt.convert;" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version=">1.3" />  
+    <Compiler Language="Cpp" Vendor="GNU" Product="GCC" Version=">3.0" />  
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="REQ" Comment="Normal Execution Request" >
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="CNF" Comment="Execution Confirmation" >
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="IN" Type="DWORD" Comment="Input event qualifier" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="OUT" Type="DWORD" Comment="Output event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC >
+      <ECState Name="START" Comment="Initial State" x="555.55554" y="427.77777" >
+      </ECState>
+      <ECState Name="REQ" Comment="Normal execution" x="216.66666" y="755.55554" >
+        <ECAction Algorithm="REQ" Output="CNF" />
+      </ECState>
+      <ECTransition Source="START" Destination="REQ" Condition="REQ" x="555.55554" y="600.0" />
+      <ECTransition Source="REQ" Destination="START" Condition="1" x="216.66666" y="427.77777" />
+    </ECC>
+  <Algorithm Name="REQ" Comment="Normally executed algorithm" >
+    <ST Text="OUT:=IN;&#10;" />
+  </Algorithm>
+  </BasicFB>
+</FBType>

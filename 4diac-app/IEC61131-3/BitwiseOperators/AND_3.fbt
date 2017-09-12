@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="FB to calculate bitwise boolean AND (generic FB)" Name="AND_3">
+  <Identification Standard="61499-1"/>
+  <VersionInfo Author="Matthias Plasch" Date="2014-10-11" Organization="4DIAC-Consortium" Remarks="matthias.plasch@profactor.at" Version="1.0"/>
+  <CompilerInfo/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN1"/>
+        <With Var="IN2"/>
+        <With Var="IN3"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="AND input 1" Name="IN1" Type="ANY_BIT"/>
+      <VarDeclaration Comment="AND input 2" Name="IN2" Type="ANY_BIT"/>
+      <VarDeclaration Comment="AND input 3" Name="IN3" Type="ANY_BIT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="AND result" Name="OUT" Type="ANY_BIT"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

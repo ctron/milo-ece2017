@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_CTRL_OUT">
+  <Identification Classification="Control Modules" Description="CTRL_OUT adds to the CI input the value of OFFSET and returns the result to Y if MANUAL = FALSE. If MANUAL is TRUE at output Y the input value of MAN_IN + OFFSET is issued. Y is always limited to the boundaries defined by LIM_L and LIM_H. If Y reaches one of the limits, then the output LIM is TRUE. CTRL_OUT can be used to build own rule modules." Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-23" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="CI"/>
+        <With Var="OFFSET"/>
+        <With Var="MAN_IN"/>
+        <With Var="LIM_L"/>
+        <With Var="LIM_H"/>
+        <With Var="MANUAL"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="LIM"/>
+        <With Var="Y"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="input from controller" Name="CI" Type="REAL"/>
+      <VarDeclaration Comment="output offset" Name="OFFSET" Type="REAL"/>
+      <VarDeclaration Comment="manual input" Name="MAN_IN" Type="REAL"/>
+      <VarDeclaration Comment="lower output limit" Name="LIM_L" Type="REAL"/>
+      <VarDeclaration Comment="upper output limit" Name="LIM_H" Type="REAL"/>
+      <VarDeclaration Comment="switch for manual operation (TODO this could be also an event)" Name="MANUAL" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output event qualifier" Name="Y" Type="REAL"/>
+      <VarDeclaration Name="LIM" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="550.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="Y := SEL(MANUAL, CI, MAN_IN) + OFFSET;&#13;&#10;&#13;&#10;(* Limit the output *)&#13;&#10;IF Y &gt; LIM_L AND Y &lt; LIM_H THEN&#13;&#10;&#9;LIM := FALSE;&#13;&#10;ELSE&#13;&#10;&#9;Y := LIMIT(LIM_L, Y, LIM_H);&#13;&#10;&#9;LIM := TRUE;&#13;&#10;END_IF;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

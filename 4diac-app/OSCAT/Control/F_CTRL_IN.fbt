@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="F_CTRL_IN">
+  <Identification Classification="control module" Description="CTRL_IN calculates the process deviation (SET_POINT _ ACTUAL) and passes them at the output. If the diference is less than the value at the input  NOISE of the output remains at 0. CTRL_IN can be used to build own rule modules." Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-23" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="ACTUAL"/>
+        <With Var="NOISE"/>
+        <With Var="SET_POINT"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="default" Name="SET_POINT" Type="REAL"/>
+      <VarDeclaration Comment="process value" Name="ACTUAL" Type="REAL"/>
+      <VarDeclaration Comment="threshold" Name="NOISE" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="process deviation" Name="OUT" Type="REAL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="550.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+    </ECC>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="CTRL_IN := DEAD_ZONE(SET_POINT - ACTUAL, NOISE);"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

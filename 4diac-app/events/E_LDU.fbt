@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Event-driven Workpiece Load/Unload Model" Name="E_LDU">
+  <Identification Description="Color selection" Function="GUI" Standard="61499-1" Type="Selection"/>
+  <VersionInfo Author="JHC" Date="2005-06-01" Organization="Holobloc Inc" Remarks="Recompiled with new emitter." Version="0.2"/>
+  <VersionInfo Author="JHC" Date="2004-10-18" Organization="Rockwell Automation" Remarks="Derived from E_SEL_COLOR." Version="0.1"/>
+  <VersionInfo Author="JHC" Date="2004-09-25" Organization="Rockwell Automation" Remarks="Derived from E_SEL_COLOR." Version="0.0"/>
+  <CompilerInfo header="package fb.rt.mva;">
+    <Compiler Language="Java" Product="JDK" Vendor="Sun" Version="1.4.2"/>
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Load Workpiece 1" Name="LD1">
+        <With Var="S1"/>
+        <With Var="W1"/>
+      </Event>
+      <Event Comment="Unload" Name="UNLD">
+        <With Var="S0"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Load Command" Name="LD">
+        <With Var="STYLE"/>
+        <With Var="WKPC"/>
+        <With Var="PRESENT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Workpiece 1 Style" Name="S1" Type="VSTYLE"/>
+      <VarDeclaration Comment="Workpiece 1 Color" Name="W1" Type="COLOR"/>
+      <VarDeclaration Comment="Unloaded style" Name="S0" Type="VSTYLE"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Workpiece Style" Name="STYLE" Type="VSTYLE"/>
+      <VarDeclaration Comment="Workpiece Color" Name="WKPC" Type="COLOR"/>
+      <VarDeclaration Comment="Workpiece Present" Name="PRESENT" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC/>
+    <Algorithm Comment="Load Workpiece 1" Name="LD1">
+      <Other Language="Java" Text="STYLE.value=S1.value;&#10;WKPC.value=W1.value;&#10;PRESENT.value = true;&#10;LD.serviceEvent(this);&#10;"/>
+    </Algorithm>
+    <Algorithm Comment="Unload Workpiece" Name="UNLD">
+      <Other Language="Java" Text="STYLE.value = S0.value;&#10;PRESENT.value = false;&#10;LD.serviceEvent(this);&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

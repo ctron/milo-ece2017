@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="IN_ARRAY" Comment="ARRAY input from TextField-see IN_ANY" >
+  <Identification Standard="61499-1" Classification="GUI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-06-01" Remarks="Added W input to subclass from IN_ANY." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-04-19" />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*;" classdef="public class IN_ARRAY extends IN_ANY" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" >
+        <With Var="QI" />
+        <With Var="W" />
+        <With Var="N" />
+        <With Var="TYPE" />
+        <With Var="IVAL" />
+      </Event>
+      <Event Name="REQ" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" />
+      <VarDeclaration Name="W" Type="UINT" InitialValue="20" Comment="TextField width in chars" />
+      <VarDeclaration Name="N" Type="UINT" Comment="Number of array elements" />
+      <VarDeclaration Name="TYPE" Type="WSTRING" Comment="Array element type" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" InitialValue="&#34;[]&#34;" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="1=OK,0=Error" />
+      <VarDeclaration Name="OUT" Type="ARRAY" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

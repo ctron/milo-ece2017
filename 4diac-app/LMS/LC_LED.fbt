@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Composite Function Block Type" Name="LC_LED">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-30" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="QI"/>
+        <With Var="PORT"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="QI"/>
+        <With Var="Q"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="QO"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="QO"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input event qualifier" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="Port #" Name="PORT" Type="UINT"/>
+      <VarDeclaration Comment="LED On/Off" Name="Q" Type="BOOL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output event qualifier" Name="QO" Type="BOOL"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Name="L_S_PORT" Type="L_S_PORT" x="1440.0" y="120.0">
+      <Parameter Name="T" Value="1"/>
+    </FB>
+    <FB Name="L_LED" Type="L_LED" x="2280.0" y="475.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="L_S_PORT.QI" Source="QI" dx1="745.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_S_PORT.PORT" Source="PORT" dx1="655.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_LED.QI" Source="L_S_PORT.QO" dx1="130.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_LED.T" Source="L_S_PORT.ST" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_LED.Q" Source="Q" dx1="590.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_LED.PORT" Source="PORT" dx1="670.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="QO" Source="L_LED.QO" dx1="275.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="L_S_PORT.INIT" Source="INIT" dx1="835.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_S_PORT.REQ" Source="REQ" dx1="785.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_LED.INIT" Source="L_S_PORT.INITO" dx1="330.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="L_LED.REQ" Source="L_S_PORT.CNF" dx1="240.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="INITO" Source="L_LED.INITO" dx1="145.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CNF" Source="L_LED.CNF" dx1="205.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

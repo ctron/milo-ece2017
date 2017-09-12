@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="FB_TABLE" Comment="Abstract superclass for HMI elements containing a table." >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2004-06-22" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialize matrix to IN" >
+        <With Var="QI" />
+        <With Var="ROWS" />
+        <With Var="COLS" />
+        <With Var="IVAL" />
+      </Event>
+      <Event Name="REQ" Comment="Set table values(for table outputs only)" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" Comment="Confirmation of REQ(for table outputs)or user inputs(for table inputs)" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="1=Enabled,0=Inhibited" />
+      <VarDeclaration Name="ROWS" Type="UINT" InitialValue="1" Comment="Number of rows in the table" />
+      <VarDeclaration Name="COLS" Type="UINT" InitialValue="1" Comment="Number of columns in the table" />
+      <VarDeclaration Name="IVAL" Type="WSTRING" Comment="Initialization string(subclass-dependent)" />
+      <VarDeclaration Name="IN" Type="ANY" Comment="Data to update table(implementation-dependent)" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="0=OK,1=Inhibited" />
+      <VarDeclaration Name="STATUS" Type="UINT" Comment="0=OK,2=TYPE_CONVERSION_ERROR,4=INHIBITED,13=ARRAY_SIZE_ERROR" />
+      <VarDeclaration Name="OUT" Type="ANY" Comment="Output data from table(implementation-dependent)" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="table" LeftInterface="FB_TABLE" >
+    <ServiceSequence Name="normal_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_TABLE" Event="INIT+" Parameters="ROWS,COLS,IVAL" />
+        <OutputPrimitive Interface="table" Event="initialize" />
+        <OutputPrimitive Interface="FB_TABLE" Event="INITO+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="unsuccessful_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_TABLE" Event="INIT+" Parameters="ROWS,COLS,IVAL" />
+        <OutputPrimitive Interface="table" Event="initialize" />
+        <OutputPrimitive Interface="FB_TABLE" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="initialization_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_TABLE" Event="INIT-" />
+        <OutputPrimitive Interface="FB_TABLE" Event="INITO-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_TABLE" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="table" Event="update" />
+        <OutputPrimitive Interface="FB_TABLE" Event="IND+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_TABLE" Event="REQ-" />
+        <OutputPrimitive Interface="FB_TABLE" Event="IND-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="table_not_initialized" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_TABLE" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="FB_TABLE" Event="IND-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="FB_TABLE" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="table" Event="request" />
+        <OutputPrimitive Interface="FB_TABLE" Event="CNF-" Parameters="STATUS" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="user_input" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="table" Event="setValue" />
+        <OutputPrimitive Interface="FB_TABLE" Event="IND+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="user_input_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="table" Event="setValue" Parameters="QI=FALSE" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="user_input_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="table" Event="setValue" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

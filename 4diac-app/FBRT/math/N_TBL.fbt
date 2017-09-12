@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "../LibraryElement.dtd" >
+<FBType Name="N_TBL" Comment="Gets the Nth element from a list of strings" >
+  <Identification Standard="61499-1" Classification="Math" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-04-21" />
+  <CompilerInfo header="package fb.rt.math; " >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="REQ" Comment="Table Lookup" >
+        <With Var="N" />
+        <With Var="VALUES" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="CNF" Comment="Lookup Result" >
+        <With Var="VALUE" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="N" Type="UINT" Comment="Key for Lookup" />
+      <VarDeclaration Name="VALUES" Type="WSTRING" Comment="Comma-separated List of Values" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="VALUE" Type="WSTRING" Comment="Lookup Result,Empty if Lookup Failed" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="N_TBL" LeftInterface="APPLICATION" >
+    <ServiceSequence Name="normal_lookup" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="REQ" Parameters="KEY" />
+        <OutputPrimitive Interface="APPLICATION" Event="CNF" Parameters="VALUE" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="lookup_error" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="APPLICATION" Event="REQ" Parameters="SD" />
+        <OutputPrimitive Interface="APPLICATION" Event="CNF" Parameters="&#34;&#34;" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

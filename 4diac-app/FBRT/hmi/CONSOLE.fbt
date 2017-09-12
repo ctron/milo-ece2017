@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="CONSOLE" Comment="Output Qualified Event+Data to Console" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-04-03" />
+  <CompilerInfo header="package fb.rt.hmi;" >
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization Event" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+      <Event Name="REQ" Comment="Request Event" >
+        <With Var="QI" />
+        <With Var="IN" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="CNF" Comment="Output Confirm" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" />
+      <VarDeclaration Name="IN" Type="WSTRING" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Copy of QI" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Copy of IN" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="DIAG_LOG" Comment="A diagnostic log with time stamping of conditions,acknowledgments and repair times" >
+  <Identification Standard="61499-1" Classification="HMI" ApplicationDomain="Diagnostics" Function="Tabular log" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2004-06-23" Remarks="Moved to fb.rt.swing, subclassed from FB_TABLE." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-04-14" Remarks="First XML version" />
+  <CompilerInfo header="package fb.rt.swing; " classdef="public class DIAG_LOG extends FB_TABLE" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version="1.4.2" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialize" >
+        <With Var="QI" />
+      </Event>
+      <Event Name="REQ" Comment="Log an event" >
+        <With Var="SRC" />
+        <With Var="COND" />
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="STATUS" />
+        <With Var="QO" />
+      </Event>
+      <Event Name="IND" Comment="REQ Confirmation" >
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier (see FB_TABLE for usage)" />
+      <VarDeclaration Name="SRC" Type="WSTRING" Comment="Source of event being logged" />
+      <VarDeclaration Name="COND" Type="WSTRING" Comment="Condition being logged" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Output qualifier, (see FB_TABLE for usage)" />
+      <VarDeclaration Name="STATUS" Type="UINT" Comment="0=OK,2=TYPE_CONVERSION_ERROR,4=INHIBITED,13=ARRAY_SIZE_ERROR" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

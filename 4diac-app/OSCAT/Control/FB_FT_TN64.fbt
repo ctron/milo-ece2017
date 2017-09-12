@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Basic Function Block Type" Name="FB_FT_TN64">
+  <Identification Standard="61499-2"/>
+  <VersionInfo Author="4DIAC-IDE" Date="2011-08-30" Organization="4DIAC-Consortium" Version="0.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+        <With Var="IN"/>
+        <With Var="T"/>
+      </Event>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN"/>
+        <With Var="T"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Input event qualifier" Name="IN" Type="REAL"/>
+      <VarDeclaration Name="T" Type="REAL"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Output event qualifier" Name="OUT" Type="REAL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <InternalVars>
+      <VarDeclaration Comment="Internal Variable" InitialValue="64" Name="length" Type="INT"/>
+      <VarDeclaration ArraySize="64" Comment="Internal Variable" InitialValue="" Name="X" Type="REAL"/>
+      <VarDeclaration Comment="Internal Variable" InitialValue="" Name="cnt" Type="INT"/>
+      <VarDeclaration Comment="Internal Variable" InitialValue="" Name="last" Type="TIME"/>
+      <VarDeclaration Comment="Internal Variable" InitialValue="" Name="tx" Type="TIME"/>
+    </InternalVars>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="380.0" y="285.0"/>
+      <ECState Comment="Initialization" Name="INIT" x="920.0" y="140.0">
+        <ECAction Algorithm="INIT" Output="INITO"/>
+      </ECState>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="750.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECState Comment="" Name="checkTime" x="1435.0" y="855.0">
+        <ECAction Algorithm="checkTime"/>
+      </ECState>
+      <ECTransition Comment="" Condition="INIT" Destination="INIT" Source="START" x="920.0" y="425.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="INIT" x="550.0" y="140.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+      <ECTransition Comment="" Condition="REQ" Destination="checkTime" Source="START" x="995.0" y="625.0"/>
+      <ECTransition Comment="" Condition="REQ" Destination="checkTime" Source="checkTime" x="1535.0" y="1125.0"/>
+      <ECTransition Comment="" Condition="tx - last &gt;= T / length" Destination="REQ" Source="checkTime" x="705.0" y="1295.0"/>
+    </ECC>
+    <Algorithm Comment="Initialization algorithm" Name="INIT">
+      <ST Text="X[cnt] := IN;&#13;&#10;last := TIME();"/>
+    </Algorithm>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <ST Text="IF cnt = length - 1 THEN &#13;&#10;  cnt := 0; &#13;&#10;ELSE &#13;&#10;  cnt := cnt + 1; &#13;&#10;END_IF;&#13;&#10;&#13;&#10;OUT := X[cnt];&#13;&#10;X[cnt] := IN;&#13;&#10;last := tx;"/>
+    </Algorithm>
+    <Algorithm Comment="ALG" Name="checkTime">
+      <ST Text="tx :=TIME();"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

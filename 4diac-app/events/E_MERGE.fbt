@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_MERGE" Comment="Merge(OR)of multiple events" >
+  <Identification Standard="61499-2" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2000-10-18" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-11-19" Remarks="SRC version" />
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="EI1" Comment="First input event" >
+      </Event>
+      <Event Name="EI2" Comment="Second input event" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Output Event" >
+      </Event>
+    </EventOutputs>
+  </InterfaceList>
+</FBType>

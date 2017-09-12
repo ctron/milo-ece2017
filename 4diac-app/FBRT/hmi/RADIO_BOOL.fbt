@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="RADIO_BOOL" Comment="Radio Button BOOL Input" >
+  <Identification Standard="61499-1" Classification="HMI" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.3" Author="JHC" Date="2004-06-21" Remarks="Updated documentation (REQ not inhibited)." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.2" Author="JHC" Date="2004-06-08" Remarks="Updated documentation (REQ not inhibited)." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-03-03" />
+  <CompilerInfo header="package fb.rt.hmi; import java.awt.*; import java.awt.event.*;" classdef="public class RADIO_BOOL extends FBInstance implements ItemListener" >
+    <Compiler Language="Java" Vendor="Sun" Product="JDK" Version="1.4.2" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="LABEL1" />
+        <With Var="LABEL0" />
+        <With Var="IN" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+      <Event Name="IND" Comment="User changed state" >
+        <With Var="QO" />
+        <With Var="OUT" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Event qualifier" />
+      <VarDeclaration Name="LABEL1" Type="WSTRING" InitialValue="TRUE" Comment="Label for TRUE state" />
+      <VarDeclaration Name="LABEL0" Type="WSTRING" InitialValue="FALSE" Comment="Label for FALSE state" />
+      <VarDeclaration Name="IN" Type="BOOL" Comment="Initial value" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event qualifier" />
+      <VarDeclaration Name="OUT" Type="BOOL" Comment="Output data" />
+    </OutputVars>
+  </InterfaceList>
+  <Service RightInterface="HMI" LeftInterface="RADIO_BOOL" >
+    <ServiceSequence Name="normal_initialization" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RADIO_BOOL" Event="INIT+" Parameters="LABEL1,LABEL0,IN" />
+        <OutputPrimitive Interface="HMI" Event="initialize" />
+        <OutputPrimitive Interface="RADIO_BOOL" Event="INITO+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="initialization_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RADIO_BOOL" Event="INIT-" />
+        <OutputPrimitive Interface="RADIO_BOOL" Event="INITO-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="HMI" Event="itemStateChanged" Parameters="QI=1" />
+        <OutputPrimitive Interface="RADIO_BOOL" Event="IND+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="indication_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="HMI" Event="itemStateChanged" Parameters="QI=0" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_no_change" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RADIO_BOOL" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="HMI" Event="select" />
+        <OutputPrimitive Interface="RADIO_BOOL" Event="CNF+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_selection_change" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RADIO_BOOL" Event="REQ+" Parameters="IN" />
+        <OutputPrimitive Interface="HMI" Event="select" />
+        <OutputPrimitive Interface="RADIO_BOOL" Event="IND+" Parameters="OUT" />
+        <OutputPrimitive Interface="RADIO_BOOL" Event="CNF+" Parameters="OUT" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="request_inhibited" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="RADIO_BOOL" Event="REQ-" />
+        <OutputPrimitive Interface="RADIO_BOOL" Event="CNF-" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

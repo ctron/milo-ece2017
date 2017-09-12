@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="PUBL_2" Comment="Two-Variable Local Group Publisher" >
+  <Identification Standard="61499-1" Classification="Communications" Function="2-variable local group publisher" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-02" Remarks="Optimized." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-10-02" Remarks="Copied/modified from PUBLISH_2" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="ID" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+        <With Var="SD_1" />
+        <With Var="SD_2" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Local Group Name-Default is FB Instance Name" />
+      <VarDeclaration Name="SD_1" Type="ANY" Comment="Data to Send" />
+      <VarDeclaration Name="SD_2" Type="ANY" Comment="Data to Send" />
+    </InputVars>
+  </InterfaceList>
+</FBType>

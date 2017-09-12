@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_R_TRIG" Comment="Boolean rising edge detection" >
+  <Identification Standard="61499-1" Classification="Event processing" Function="Edge detection" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-01-31" Remarks="XML version" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="1998-10-02" Remarks="SRC version" />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="EI" Comment="Event Input" >
+        <With Var="QI" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Event Output" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Boolean input for rising edge detection" />
+    </InputVars>
+  </InterfaceList>
+  <FBNetwork >
+    <FB Name="D" Type="E_D_FF" x="211.7647" y="11.7647" />
+    <FB Name="SW" Type="E_SWITCH" x="652.9412" y="11.7647" />
+    <EventConnections>
+      <Connection Source="EI" Destination="D.CLK" dx1="135.2941" />
+      <Connection Source="D.EO" Destination="SW.EI" dx1="29.4118" dx2="141.1765" dy="-70.5882" />
+      <Connection Source="SW.EO1" Destination="EO" dx1="1076.4706" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="QI" Destination="D.D" dx1="129.4118" />
+      <Connection Source="D.Q" Destination="SW.G" dx1="70.5882" dx2="741.1765" dy="988.2353" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="OUT_EVENT" Comment="Event Output Flasher" >
+  <Identification Standard="61499-1" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-05-03" Remarks="Made QI IV=true." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2001-04-14" Remarks="Saved layout." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2000-05-01" />
+  <CompilerInfo header="package fb.rt.hmi;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Initialization" >
+        <With Var="QI" />
+        <With Var="LABEL" />
+        <With Var="FLASH" />
+      </Event>
+      <Event Name="REQ" Comment="Request" >
+        <With Var="QI" />
+        <With Var="DT" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+        <With Var="QO" />
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+        <With Var="QO" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" InitialValue="true" Comment="Input event qualifier" />
+      <VarDeclaration Name="DT" Type="TIME" InitialValue="t#500ms" Comment="Flash interval" />
+      <VarDeclaration Name="LABEL" Type="WSTRING" />
+      <VarDeclaration Name="FLASH" Type="COLOR" InitialValue="COLOR#red" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier" />
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork >
+    <FB Name="DLY" Type="E_DELAY" x="194.1176" y="11.7647" />
+    <FB Name="FF" Type="E_SR" x="788.2353" y="11.7647" />
+    <FB Name="OUT" Type="OUT_BOOL" x="1317.647" y="11.7647" />
+    <FB Name="GATE" Type="E_SWITCH" x="1888.2352" y="588.2353" />
+    <EventConnections>
+      <Connection Source="INIT" Destination="OUT.INIT" dx1="1211.7646" />
+      <Connection Source="OUT.INITO" Destination="INITO" dx1="1805.8823" />
+      <Connection Source="REQ" Destination="DLY.START" dx1="82.3529" />
+      <Connection Source="REQ" Destination="FF.S" dx1="676.4706" />
+      <Connection Source="DLY.EO" Destination="FF.R" dx1="35.2941" dx2="29.4118" dy="-70.5882" />
+      <Connection Source="FF.EO" Destination="OUT.REQ" dx1="58.8235" />
+      <Connection Source="OUT.CNF" Destination="GATE.EI" dx1="164.7059" />
+      <Connection Source="GATE.EO0" Destination="CNF" dx1="2323.5293" />
+    </EventConnections>
+    <DataConnections>
+      <Connection Source="QI" Destination="OUT.QI" dx1="1235.2941" />
+      <Connection Source="OUT.QO" Destination="QO" dx1="1770.5883" />
+      <Connection Source="DT" Destination="DLY.DT" dx1="105.8824" />
+      <Connection Source="FF.Q" Destination="OUT.IN" dx1="64.7059" />
+      <Connection Source="LABEL" Destination="OUT.LABEL" dx1="1170.5883" />
+      <Connection Source="FLASH" Destination="OUT.C1" dx1="1170.5883" />
+      <Connection Source="FF.Q" Destination="GATE.G" dx1="64.7059" />
+    </DataConnections>
+  </FBNetwork>
+</FBType>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="PUBL_0" Comment="Event-only Local Publisher" >
+  <Identification Standard="61499-1" Classification="Communications" Description="Local multicast group publisher" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2002-05-02" Remarks="Optimized version." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-10-02" Remarks="Copied/Modified from PUBLISH" />
+  <CompilerInfo header="package fb.rt.net;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Comment="Service Initialization" >
+        <With Var="ID" />
+      </Event>
+      <Event Name="REQ" Comment="Service Request" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Comment="Initialization Confirm" >
+      </Event>
+      <Event Name="CNF" Comment="Service Confirmation" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="ID" Type="WSTRING" Comment="Local Group Name-Default is FB Instance Name" />
+    </InputVars>
+  </InterfaceList>
+  <Service RightInterface="SUBL_0" LeftInterface="PUBL_0" Comment="Event Publication Service" >
+    <ServiceSequence Name="normal_establishment" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="PUBL_0" Event="INIT" Parameters="ID" />
+        <OutputPrimitive Interface="PUBL_0" Event="INITO" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <InputPrimitive Interface="SUBL_0" Event="INIT" Parameters="ID" />
+        <OutputPrimitive Interface="SUBL_0" Event="INITO" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="event_transfer" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="PUBL_0" Event="REQ" />
+        <OutputPrimitive Interface="SUBL_0" Event="IND" />
+        <OutputPrimitive Interface="PUBL_0" Event="CNF" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>

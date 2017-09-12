@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceType SYSTEM "http://www.holobloc.com/xml/Segment.dtd" >
+<SegmentType Name="DeviceNet" Comment="DeviceNet Segment" >
+  <Identification Standard="61499 ITA" Description="DeviceNet ..." />
+  <VersionInfo Organization="Profactor GmbH" Version="0.1" Author="tstras" Date="2008-07-03"/>
+  <CompilerInfo header="abc.xyz" classdef="DeviceNet ...." >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <VarDeclaration Name="Param" Type="WSTRING" Comment="Param" />
+</SegmentType>

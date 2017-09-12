@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="E_CYCLE" Comment="Periodic(cyclic)Generation of an Event" >
+  <Identification Standard="61499-1" Classification="Event Processing" Function="Cyclic Event Generation" />
+  <VersionInfo Organization="Rockwell Automation" Version="0.1" Author="JHC" Date="2002-01-30" Remarks="Changed from basic to SIFB, added change_DT functionality." />
+  <VersionInfo Organization="Rockwell Automation" Version="0.0" Author="JHC" Date="2001-04-14" Remarks="First XML version." />
+  <CompilerInfo header="package fb.rt.events;" >
+    <Compiler Language="Java" Vendor="IBM" Product="VisualAge" Version="3.0" />
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="START" >
+        <With Var="DT" />
+      </Event>
+      <Event Name="STOP" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Periodic event at period DT,starting at DT after START" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="DT" Type="TIME" Comment="Period between events" />
+    </InputVars>
+  </InterfaceList>
+  <Service RightInterface="resource" LeftInterface="E_CYCLE" >
+    <ServiceSequence Name="event_cycle" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_CYCLE" Event="START" Parameters="DT" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="E_CYCLE" Event="EO" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="E_CYCLE" Event="EO" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="E_CYCLE" Event="EO" />
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Name="cycle_canceled" >
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_CYCLE" Event="START" Parameters="DT" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <OutputPrimitive Interface="E_CYCLE" Event="EO" />
+      </ServiceTransaction>
+      <ServiceTransaction >
+        <InputPrimitive Interface="E_CYCLE" Event="STOP" />
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+</FBType>
