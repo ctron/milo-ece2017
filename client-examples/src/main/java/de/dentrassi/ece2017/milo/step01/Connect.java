@@ -24,6 +24,22 @@ import de.dentrassi.ece2017.milo.Constants;
 
 public class Connect {
 
+    private static OpcUaClientConfig buildConfiguration(final EndpointDescription[] endpoints) {
+
+        final OpcUaClientConfigBuilder cfg = new OpcUaClientConfigBuilder();
+
+        cfg.setEndpoint(findBest(endpoints));
+
+        return cfg.build();
+
+    }
+
+    public static EndpointDescription findBest(final EndpointDescription[] endpoints) {
+        return endpoints[0];
+    }
+
+    // create client
+
     public static OpcUaClient createClientSync() throws InterruptedException, ExecutionException {
         final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
 
@@ -39,18 +55,7 @@ public class Connect {
                 .thenApply(endpoints -> new OpcUaClient(buildConfiguration(endpoints)));
     }
 
-    private static OpcUaClientConfig buildConfiguration(final EndpointDescription[] endpoints) {
-
-        final OpcUaClientConfigBuilder cfg = new OpcUaClientConfigBuilder();
-
-        cfg.setEndpoint(findBest(endpoints));
-
-        return cfg.build();
-    }
-
-    public static EndpointDescription findBest(final EndpointDescription[] endpoints) {
-        return endpoints[0];
-    }
+    // connect
 
     public static CompletableFuture<OpcUaClient> connect() {
         return createClient()
@@ -63,6 +68,8 @@ public class Connect {
         client.connect().get();
         return client;
     }
+
+    // main entry point
 
     public static void main(final String[] args) throws InterruptedException, ExecutionException {
 
@@ -82,7 +89,7 @@ public class Connect {
 
         System.out.println("Wait for completion");
 
-        s.acquire();
+        s.acquire(); // what could could wrong?
 
         System.out.println("Bye bye");
     }

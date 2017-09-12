@@ -11,20 +11,14 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>milo-client-examples</artifactId>
+    <artifactId>milo-server-examples</artifactId>
 
     <dependencies>
 
         <dependency>
             <groupId>org.eclipse.milo</groupId>
-            <artifactId>sdk-client</artifactId>
+            <artifactId>sdk-server</artifactId>
             <version>${milo.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.neoscada.utils</groupId>
-            <artifactId>org.eclipse.scada.utils</artifactId>
-            <version>0.4.0</version>
         </dependency>
 
         <dependency>
