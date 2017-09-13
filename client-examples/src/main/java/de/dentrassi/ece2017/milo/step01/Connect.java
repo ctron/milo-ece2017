@@ -40,13 +40,6 @@ public class Connect {
 
     // create client
 
-    public static OpcUaClient createClientSync() throws InterruptedException, ExecutionException {
-        final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
-
-        final EndpointDescription[] endpoints = UaTcpStackClient.getEndpoints(endpoint).get();
-        return new OpcUaClient(buildConfiguration(endpoints));
-    }
-
     public static CompletableFuture<OpcUaClient> createClient() {
         final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
 
@@ -61,12 +54,6 @@ public class Connect {
         return createClient()
                 .thenCompose(OpcUaClient::connect)
                 .thenApply(c -> (OpcUaClient) c);
-    }
-
-    public static OpcUaClient connectSync() throws InterruptedException, ExecutionException {
-        final OpcUaClient client = createClientSync();
-        client.connect().get();
-        return client;
     }
 
     // main entry point
@@ -93,4 +80,18 @@ public class Connect {
 
         System.out.println("Bye bye");
     }
+
+    public static OpcUaClient connectSync() throws InterruptedException, ExecutionException {
+        final OpcUaClient client = createClientSync();
+        client.connect().get();
+        return client;
+    }
+
+    public static OpcUaClient createClientSync() throws InterruptedException, ExecutionException {
+        final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
+
+        final EndpointDescription[] endpoints = UaTcpStackClient.getEndpoints(endpoint).get();
+        return new OpcUaClient(buildConfiguration(endpoints));
+    }
+
 }

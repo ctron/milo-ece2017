@@ -11,6 +11,7 @@
 package de.dentrassi.ece2017.milo.server;
 
 import static java.util.Arrays.asList;
+import static org.eclipse.milo.opcua.stack.core.types.builtin.LocalizedText.english;
 
 import java.security.cert.X509Certificate;
 import java.util.EnumSet;
@@ -36,6 +37,9 @@ public class Server {
         ));
 
         builder.setBindPort(4840);
+
+        builder.setApplicationName(english("Foo Bar Server"));
+        builder.setApplicationUri("urn:my:example");
 
         builder.setUserTokenPolicies(
                 asList(OpcUaServerConfig.USER_TOKEN_POLICY_ANONYMOUS) // You wouldn't leave you door open, would you?
