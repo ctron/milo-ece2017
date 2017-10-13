@@ -69,16 +69,16 @@
         <FB Name="E_CYCLE" Type="E_CYCLE" x="500.0" y="500.0">
           <Parameter Name="DT" Value="T#1500ms"/>
         </FB>
-        <FB Name="E_SWITCH" Type="E_SWITCH" x="2280.0" y="1330.0"/>
+        <FB Name="E_SWITCH" Type="E_SWITCH" x="2200.0" y="500.0"/>
         <FB Name="E_SR" Type="E_SR" x="3420.0" y="475.0"/>
-        <FB Name="PUBLISH_LED_STATE" Type="PUBLISH_1" x="4200.0" y="1900.0">
+        <FB Name="PUBLISH_LED_STATE" Type="PUBLISH_1" x="4200.0" y="2200.0">
           <Parameter Name="QI" Value="1"/>
           <Parameter Name="ID" Value="opc_ua[/Objects/1:LedState]"/>
         </FB>
-        <FB Name="E_PERMIT" Type="E_PERMIT" x="1600.0" y="500.0">
+        <FB Name="E_PERMIT" Type="E_PERMIT" x="1400.0" y="500.0">
           <Parameter Name="PERMIT" Value="1"/>
         </FB>
-        <FB Name="SUBSCRIBE_TIMER_STATE" Type="SUBSCRIBE_1" x="400.0" y="1200.0">
+        <FB Name="SUBSCRIBE_TIMER_STATE" Type="SUBSCRIBE_1" x="400.0" y="2200.0">
           <Parameter Name="QI" Value="1"/>
           <Parameter Name="ID" Value="opc_ua[/Objects/1:TimerState]"/>
         </FB>
