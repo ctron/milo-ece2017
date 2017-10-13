@@ -32,6 +32,8 @@ public class CallMe {
             @UaInputArgument(name = "me") final String me,
             @UaOutputArgument(name = "result") final Out<String> result) {
 
+        System.err.println("Someone called me: " + me);
+
         if ("Al".equals(me)) {
             result.set("You did it!");
         } else {

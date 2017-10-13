@@ -8,7 +8,7 @@
  * Contributors:
  *     Jens Reimann - initial API and implementation
  *******************************************************************************/
-package de.dentrassi.ece2017.milo.step02;
+package de.dentrassi.ece2017.milo.step06;
 
 import static de.dentrassi.ece2017.milo.step01.Connect.connect;
 import static java.util.Arrays.asList;
@@ -31,8 +31,6 @@ import de.dentrassi.ece2017.milo.Values;
 public class Read {
 
     private static final NodeId NODE_TO_READ = new NodeId(0, 2261);
-
-    // private static final NodeId NODE_TO_READ = NodeId.parse("ns=0;i=2261");
 
     public static CompletableFuture<DataValue> read(
             final OpcUaClient client,

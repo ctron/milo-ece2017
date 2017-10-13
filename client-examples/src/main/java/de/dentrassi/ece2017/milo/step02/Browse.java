@@ -8,7 +8,7 @@
  * Contributors:
  *     Jens Reimann - initial API and implementation
  *******************************************************************************/
-package de.dentrassi.ece2017.milo.step04;
+package de.dentrassi.ece2017.milo.step02;
 
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.uint;
 
@@ -31,7 +31,9 @@ public class Browse {
         final OpcUaClient client = Connect.connect().get();
 
         try {
-
+            System.out.format("%-60s %-15s %s%n", "Name", "Type", "NodeID");
+            System.out.println(
+                    "==========================================================================================");
             browse(client, Identifiers.RootFolder, "");
 
         } finally {

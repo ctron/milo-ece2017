@@ -8,7 +8,7 @@
  * Contributors:
  *     Jens Reimann - initial API and implementation
  *******************************************************************************/
-package de.dentrassi.ece2017.milo.step06;
+package de.dentrassi.ece2017.milo.step04;
 
 import static de.dentrassi.ece2017.milo.Values.dumpValues;
 import static de.dentrassi.ece2017.milo.step01.Connect.connect;
@@ -37,7 +37,7 @@ import org.eclipse.milo.opcua.stack.core.types.structured.ReadValueId;
 public class Subscribe {
 
     private static final NodeId LED_STATE = new NodeId(1, 114);
-    private static final NodeId PERMIT_STATE = new NodeId(1, 117);
+    private static final NodeId PERMIT_STATE = NodeId.parse("ns=1;i=117");
 
     private static final AtomicInteger clientHandles = new AtomicInteger();
 
@@ -45,7 +45,7 @@ public class Subscribe {
 
         final CompletableFuture<OpcUaClient> future = connect().thenCompose(client -> {
 
-            return client.getSubscriptionManager().createSubscription(1000.0)
+            return client.getSubscriptionManager().createSubscription(1_000.0)
                     .thenCompose(subscription -> {
 
                         return subscribeTo(
@@ -81,8 +81,8 @@ public class Subscribe {
         for (final NodeId nodeId : nodeIds) {
 
             final MonitoringParameters parameters = new MonitoringParameters(
-                    uint(clientHandles.getAndIncrement()),
-                    1000.0, // sampling interval
+                    uint(clientHandles.getAndIncrement()), // must be set
+                    1_000.0, // sampling interval
                     null,
                     uint(10),
                     true);

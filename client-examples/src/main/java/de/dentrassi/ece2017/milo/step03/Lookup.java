@@ -8,7 +8,7 @@
  * Contributors:
  *     Jens Reimann - initial API and implementation
  *******************************************************************************/
-package de.dentrassi.ece2017.milo.step05;
+package de.dentrassi.ece2017.milo.step03;
 
 import static de.dentrassi.ece2017.milo.step01.Connect.connect;
 import static java.util.Collections.singletonList;

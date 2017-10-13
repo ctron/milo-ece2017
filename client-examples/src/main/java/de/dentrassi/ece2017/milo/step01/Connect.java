@@ -35,6 +35,11 @@ public class Connect {
     }
 
     public static EndpointDescription findBest(final EndpointDescription[] endpoints) {
+        /*
+         * We simply assume we have at least one and pick the first one. In a more
+         * productive scenario you would actually evaluate things like ciphers and
+         * security.
+         */
         return endpoints[0];
     }
 
@@ -44,7 +49,7 @@ public class Connect {
         final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
 
         return UaTcpStackClient
-                .getEndpoints(endpoint)
+                .getEndpoints(endpoint) // look up endpoints from remote
                 .thenApply(endpoints -> new OpcUaClient(buildConfiguration(endpoints)));
     }
 
@@ -52,8 +57,8 @@ public class Connect {
 
     public static CompletableFuture<OpcUaClient> connect() {
         return createClient()
-                .thenCompose(OpcUaClient::connect)
-                .thenApply(c -> (OpcUaClient) c);
+                .thenCompose(OpcUaClient::connect) // trigger connect
+                .thenApply(c -> (OpcUaClient) c); // cast result of connect from UaClient to OpcUaClient
     }
 
     // main entry point
@@ -64,6 +69,8 @@ public class Connect {
 
         connect()
                 .whenComplete((client, e) -> {
+                    // called when the connect operation finished ... either way
+
                     if (e == null) {
                         System.out.println("Connected");
                     } else {
@@ -72,7 +79,7 @@ public class Connect {
                     }
                 })
                 .thenCompose(OpcUaClient::disconnect)
-                .thenRun(s::release);
+                .thenRun(s::release); // wake up s.acquire() below
 
         System.out.println("Wait for completion");
 
@@ -81,17 +88,24 @@ public class Connect {
         System.out.println("Bye bye");
     }
 
-    public static OpcUaClient connectSync() throws InterruptedException, ExecutionException {
-        final OpcUaClient client = createClientSync();
-        client.connect().get();
-        return client;
-    }
+    // synchronous way of doing things
 
     public static OpcUaClient createClientSync() throws InterruptedException, ExecutionException {
         final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
 
-        final EndpointDescription[] endpoints = UaTcpStackClient.getEndpoints(endpoint).get();
+        final EndpointDescription[] endpoints = UaTcpStackClient.getEndpoints(endpoint)
+                .get();
+
         return new OpcUaClient(buildConfiguration(endpoints));
+    }
+
+    public static OpcUaClient connectSync() throws InterruptedException, ExecutionException {
+        final OpcUaClient client = createClientSync();
+
+        client.connect()
+                .get();
+
+        return client;
     }
 
 }
