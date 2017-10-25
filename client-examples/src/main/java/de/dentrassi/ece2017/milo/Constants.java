@@ -16,5 +16,6 @@ public final class Constants {
 
     // public static final String HOST = "apollo.muc.redhat.com";
     public static final String HOST = "localhost";
+    // public static final String HOST = "[fe80::2c82:aeff:fe0b:ac2%enp0s31f6]";
     public static final int PORT = 4840;
 }
