@@ -33,7 +33,7 @@ public class Server {
         final OpcUaServerConfigBuilder builder = new OpcUaServerConfigBuilder();
 
         builder.setIdentityValidator(new CompositeValidator(
-                new AnonymousIdentityValidator() // You should better ask who knocked, right?
+                AnonymousIdentityValidator.INSTANCE // You should better ask who knocked, right?
         ));
 
         builder.setBindPort(4840);
