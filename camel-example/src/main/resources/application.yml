@@ -1,0 +1,7 @@
+camel:
+  springboot:
+    name: CamelMiloExample
+
+plc:
+  host: jreimann-up2-1.muc.redhat.com
+  port: 4840

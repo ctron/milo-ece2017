@@ -59,8 +59,7 @@ public class Server {
             }
 
             @Override
-            public void verifyTrustChain(final X509Certificate certificate, final List<X509Certificate> chain)
-                    throws UaException {
+            public void verifyTrustChain(final List<X509Certificate> certificateChain) throws UaException {
                 // ... I mean it!
             }
         });

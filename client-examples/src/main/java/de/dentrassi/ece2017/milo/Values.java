@@ -10,10 +10,11 @@
  *******************************************************************************/
 package de.dentrassi.ece2017.milo;
 
+import static java.util.Arrays.asList;
+
 import java.io.PrintStream;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.milo.opcua.stack.core.StatusCodes;
@@ -21,7 +22,9 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
 import org.eclipse.milo.opcua.stack.core.types.builtin.Variant;
-import org.eclipse.scada.utils.str.Tables;
+
+import io.glutamate.lang.Exceptions;
+import io.glutamate.str.Tables;
 
 public final class Values {
 
@@ -49,10 +52,11 @@ public final class Values {
             row.add(TIMESTAMP_FORMATTER.format(value.getSourceTime().getJavaDate().toInstant()));
         }
 
-        Tables.showTable(out,
-                Arrays.asList("Node Id", "Value", "State", "Timestamp(Server)", "Timestamp(Source)"),
-                data,
-                2);
+        Exceptions.wrap(() -> {
+            Tables.showTable(out,
+                    asList("Node Id", "Value", "State", "Timestamp(Server)", "Timestamp(Source)"),
+                    data, 2);
+        });
 
         System.out.println();
     }
