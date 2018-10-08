@@ -20,9 +20,11 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
 import org.eclipse.milo.opcua.stack.core.types.builtin.Variant;
 
+import de.dentrassi.ece2017.milo.step04.Subscribe;
+
 public class Write {
 
-    private static final NodeId NODE_TO_WRITE = new NodeId(1, 117);
+    private static final NodeId NODE_TO_WRITE = Subscribe.PERMIT_STATE;
 
     public static CompletableFuture<StatusCode> write(
             final OpcUaClient client,

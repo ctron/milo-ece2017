@@ -36,8 +36,8 @@ import org.eclipse.milo.opcua.stack.core.types.structured.ReadValueId;
 
 public class Subscribe {
 
-    private static final NodeId LED_STATE = new NodeId(1, 114);
-    private static final NodeId PERMIT_STATE = NodeId.parse("ns=1;i=117");
+    public static final NodeId LED_STATE = new NodeId(1, 50193);
+    public static final NodeId PERMIT_STATE = NodeId.parse("ns=1;i=50190");
 
     private static final AtomicInteger clientHandles = new AtomicInteger();
 
