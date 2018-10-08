@@ -58,7 +58,7 @@ public class Connect {
     public static CompletableFuture<OpcUaClient> connect() {
         return createClient()
                 .thenCompose(OpcUaClient::connect) // trigger connect
-                .thenApply(c -> (OpcUaClient) c); // cast result of connect from UaClient to OpcUaClient
+                .thenApply(OpcUaClient.class::cast); // cast result of connect from UaClient to OpcUaClient
     }
 
     // main entry point
