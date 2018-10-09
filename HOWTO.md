@@ -4,13 +4,13 @@ This guide provides some information on how to run the examples presented during
 
 ## Preparing
 
-The easiest way is to check out the examples from Git and import them into the Eclipse IDE (Oxygen.1). This way
+The easiest way is to check out the examples from Git and import them into the Eclipse IDE (2018-09). This way
 you can inspect the source code and run the examples from inside the IDE.
 
-If course is it also possible to run the examples from the command line. For this you will need:
+Of course is it also possible to run the examples from the command line. For this you will need:
 
 * Apach Maven 3.5+
-* Java JDK 1.8
+* Java JDK 11
 
 Compile the source code by executing:
 
@@ -36,7 +36,7 @@ the server press CTRL-C.
 The client examples require a running OPC UA server instance. Some examples only
 work with the 4DIAC application from the [4diac-app](4diac-app) directory.
 
-In order to specifiy the target host and port it is possible to modify the file
+In order to specify the target host and port, it is possible to modify the file
 [Constants.java](client-examples/src/main/java/de/dentrassi/ece2017/milo/Constants.java "title")
 or pass "-Dhost=<my-host>" and "-Dport=4840" to the following Maven commands.
 
@@ -99,14 +99,14 @@ Run the example by executing:
 
     mvn -f client-examples/pom.xml exec:java -Dhost=127.0.0.1 -Dexec.mainClass=de.dentrassi.ece2017.milo.step05.Write
 
-This will write a boolean value to the remote application on node `ns=1;i=117`. By default it will write `false`, but the value
+This will write a boolean value to the remote application on node `ns=1;i=50190`. By default it will write `false`, but the value
 and also be provided by appending either of the following arguments to the command:
 
 * `-Dexec.arguments=true`
 * `-Dexec.arguments=false`
 
-This example will only work in combination with the 4DIAC blinking LED application. Writing "true" will let the LED blink,
-writing "false" will make it stop.
+This example will only work in combination with the 4DIAC blinking LED application. Writing `true` will let the LED blink,
+writing `false` will make it stop.
 
 ### Read
 

@@ -1,6 +1,6 @@
 # Eclipse 4DIAC™ example application
 
-This is the accompanying example application for the Milo talk.
+This is the accompanying example application for the OPC UA talk.
 It is an application based on 4DIAC. 4DIAC provides two main
 components: an IDE and a runtime environment (forte).
 
@@ -13,18 +13,39 @@ This application can be edited with the 4DIAC IDE.
 This application is intended to run on a Raspberry Pi
 with SysFS GPIO support for controlling the LEDs.
 
+However, you can also install the 4DIAC runtime, and this
+application, on any other machine supporting 4DIAC. It might
+only be that you have no blinking LED in this case.
+
+The generic steps are:
+
 * Install "forte" with OPC UA support
 * Run `FORTE_BOOT_FILE=<path-to>/ece1_RaspberryPI.fboot forte`
 
 The `ece1_RaspberryPI.fboot` is located in this repository at
 [fboot/ece1_RaspberryPI.fboot](fboot/ece1_RaspberryPI.fboot).
 
-During the talk the 4DIAC runtime will be installed on
-a Samsung Artik 5 board, running Fedora 24. The example can be
-installed on it with:
+## Running on Fedora
 
-    dnf install https://dentrassi.de/download/4diac-forte-opcua/open62541-0.3-1.git.4103.3be5205.fc24.armv7hl.rpm
-    dnf install https://dentrassi.de/download/4diac-forte-opcua/4diac-forte-1.9.0-1.git.421.ec469df.fc26.armv7hl.rpm
+Fedora already provides 4DIAC, so you can simply install this by executing
+(you can do the same for RHEL/CentOS if you enable EPEL):
 
-If you want to re-compile those binaries for other platforms
-you can also download the exact source RPMs from https://dentrassi.de/download/4diac-forte-opcua
+    sudo dnf install 4diac-forte
+
+Then copy the "boot file" to `/etc/4diac-forte-boot`, and then enable and start 4DIAC:
+
+    sudo systemctl enable --now 4diac-forte
+
+### Open up the firewall
+
+**Note:** The next steps allow unauthorized access to this device. Think twice before you do this.
+
+If you want to access the OPC UA server from outside the device, you need to open the firewall port:
+
+    sudo firewall-cmd --zone=public --add-port=4840/tcp --permanent
+    sudo firewall-cmd --reload
+
+The same is true for the 4DIAC IDE monitor port:
+
+    sudo firewall-cmd --zone=public --add-port=61499/tcp --permanent
+    sudo firewall-cmd --reload
