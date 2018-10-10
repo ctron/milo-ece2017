@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<routes
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://camel.apache.org/schema/spring"
+    xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <route id="led">
+        <from
+            uri="milo-client:tcp://{{plc.host}}:{{plc.port}}?node=RAW(ns=1;i=50193)&amp;overrideHost=true" />
+        <to uri="stream:out" />
+        <transform>
+            <simple>Client: ${body.value.value}</simple>
+        </transform>
+        <to uri="stream:out" />
+    </route>
+
+</routes>

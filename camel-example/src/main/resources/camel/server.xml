@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<routes
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://camel.apache.org/schema/spring"
+    xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <route id="server.foobar.subscribe">
+
+        <from uri="timer://foobar" />
+
+        <!-- Note: this works on my machine, you might want to read a different 
+            file -->
+        <setBody>
+            <simple>resource:file:/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp4_input</simple>
+        </setBody>
+
+        <convertBodyTo type="java.lang.Double" />
+        <transform>
+            <groovy>request.body / 1000.0</groovy>
+        </transform>
+
+        <to uri="my-milo:FooBar" />
+
+    </route>
+
+    <route id="server.foobar.write">
+
+        <from uri="my-milo:FooBar" />
+        <transform>
+            <simple>From Client: ${body}</simple>
+        </transform>
+        <to uri="stream:err" />
+
+    </route>
+
+</routes>
