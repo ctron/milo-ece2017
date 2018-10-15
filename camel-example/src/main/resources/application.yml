@@ -3,5 +3,5 @@ camel:
     name: CamelMiloExample
 
 plc:
-  host: jreimann-up2-1.muc.redhat.com
+  host: '[fe80::9289:e377:bacb:f608%enp0s31f6]'
   port: 4840
