@@ -11,13 +11,13 @@
 
         <from uri="timer://foobar" />
 
-        <!-- Note: this works on my machine, you might want to read a different 
-            file -->
-        <setBody>
-            <simple>resource:file:/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp4_input</simple>
-        </setBody>
+        <pollEnrich>
+          <simple>file:/sys/devices/platform/coretemp.0/hwmon/hwmon2?fileName=temp4_input&amp;noop=true&amp;idempotent=false</simple>
+        </pollEnrich>
 
+        <convertBodyTo type="java.lang.String" />
         <convertBodyTo type="java.lang.Double" />
+
         <transform>
             <groovy>request.body / 1000.0</groovy>
         </transform>
