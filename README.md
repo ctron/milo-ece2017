@@ -1,5 +1,8 @@
 # Heapcon 2018 – OPC UA, ready for Industry 4.0 with open source
 
+**Note:** The `master` branch shows updated examples for Eclipse Milo™ 0.3.x.
+For the 0.2.x examples, please switch to the [milo-0.2.x](https://github.com/ctron/milo-ece2017/tree/milo-0.2x)  branch.
+
 Materials of my talk around Open Source OPC UA at Heapcon 2018
 
 * [4diac-app/README.md](4diac-app/README.md): Read more about getting Eclipse 4DIAC with OPC UA support on the Intel UP².
