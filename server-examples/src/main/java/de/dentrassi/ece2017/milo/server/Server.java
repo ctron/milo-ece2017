@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat Inc.
+ * Copyright (c) 2017, 2019 Red Hat Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,11 +10,10 @@
  *******************************************************************************/
 package de.dentrassi.ece2017.milo.server;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
 import static org.eclipse.milo.opcua.stack.core.types.builtin.LocalizedText.english;
 
 import java.security.cert.X509Certificate;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.eclipse.milo.opcua.sdk.server.OpcUaServer;
@@ -23,9 +22,10 @@ import org.eclipse.milo.opcua.sdk.server.api.config.OpcUaServerConfigBuilder;
 import org.eclipse.milo.opcua.sdk.server.identity.AnonymousIdentityValidator;
 import org.eclipse.milo.opcua.sdk.server.identity.CompositeValidator;
 import org.eclipse.milo.opcua.stack.core.UaException;
-import org.eclipse.milo.opcua.stack.core.application.CertificateValidator;
-import org.eclipse.milo.opcua.stack.core.application.DefaultCertificateManager;
+import org.eclipse.milo.opcua.stack.core.security.CertificateValidator;
+import org.eclipse.milo.opcua.stack.core.security.DefaultCertificateManager;
 import org.eclipse.milo.opcua.stack.core.security.SecurityPolicy;
+import org.eclipse.milo.opcua.stack.server.EndpointConfiguration;
 
 public class Server {
     public static void main(final String[] args) throws Exception {
@@ -36,18 +36,19 @@ public class Server {
                 AnonymousIdentityValidator.INSTANCE // You should better ask who knocked, right?
         ));
 
-        builder.setBindPort(4840);
+        final EndpointConfiguration.Builder endpointBuilder = new EndpointConfiguration.Builder();
+
+        endpointBuilder.addTokenPolicies(
+                OpcUaServerConfig.USER_TOKEN_POLICY_ANONYMOUS // You wouldn't leave you door open, would you?
+        );
+
+        endpointBuilder.setSecurityPolicy(SecurityPolicy.None); // ... or give everyone access to your fridge ...
+
+        endpointBuilder.setBindPort(4840);
+        builder.setEndpoints(singleton(endpointBuilder.build()));
 
         builder.setApplicationName(english("Foo Bar Server"));
         builder.setApplicationUri("urn:my:example");
-
-        builder.setUserTokenPolicies(
-                asList(OpcUaServerConfig.USER_TOKEN_POLICY_ANONYMOUS) // You wouldn't leave you door open, would you?
-        );
-
-        builder.setSecurityPolicies(
-                EnumSet.of(SecurityPolicy.None) // ... or give everyone access to your fridge ...
-        );
 
         builder.setCertificateManager(new DefaultCertificateManager()); // ... don't to this at home! ...
 
@@ -68,8 +69,7 @@ public class Server {
 
         // register namespace
 
-        server.getNamespaceManager().registerAndAdd(
-                CustomNamespace.URI, index -> new CustomNamespace(index, server));
+        server.getAddressSpaceManager().register(new CustomNamespace(server, CustomNamespace.URI));
 
         // start it up
 

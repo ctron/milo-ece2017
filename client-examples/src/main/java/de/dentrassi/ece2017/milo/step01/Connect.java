@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat Inc.
+ * Copyright (c) 2017, 2019 Red Hat Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,7 @@
  *******************************************************************************/
 package de.dentrassi.ece2017.milo.step01;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Semaphore;
@@ -17,14 +18,15 @@ import java.util.concurrent.Semaphore;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfig;
 import org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfigBuilder;
-import org.eclipse.milo.opcua.stack.client.UaTcpStackClient;
+import org.eclipse.milo.opcua.stack.client.DiscoveryClient;
+import org.eclipse.milo.opcua.stack.core.UaException;
 import org.eclipse.milo.opcua.stack.core.types.structured.EndpointDescription;
 
 import de.dentrassi.ece2017.milo.Constants;
 
 public class Connect {
 
-    private static OpcUaClientConfig buildConfiguration(final EndpointDescription[] endpoints) {
+    private static OpcUaClientConfig buildConfiguration(final List<EndpointDescription> endpoints) {
 
         final OpcUaClientConfigBuilder cfg = new OpcUaClientConfigBuilder();
 
@@ -34,13 +36,13 @@ public class Connect {
 
     }
 
-    public static EndpointDescription findBest(final EndpointDescription[] endpoints) {
+    public static EndpointDescription findBest(final List<EndpointDescription> endpoints) {
         /*
          * We simply assume we have at least one and pick the first one. In a more
          * productive scenario you would actually evaluate things like ciphers and
          * security.
          */
-        return endpoints[0];
+        return endpoints.get(0);
     }
 
     // create client
@@ -48,9 +50,15 @@ public class Connect {
     public static CompletableFuture<OpcUaClient> createClient() {
         final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
 
-        return UaTcpStackClient
+        return DiscoveryClient
                 .getEndpoints(endpoint) // look up endpoints from remote
-                .thenApply(endpoints -> new OpcUaClient(buildConfiguration(endpoints)));
+                .thenCompose(endpoints -> {
+                    try {
+                        return CompletableFuture.completedFuture(OpcUaClient.create(buildConfiguration(endpoints)));
+                    } catch (final UaException e) {
+                        return CompletableFuture.failedFuture(e);
+                    }
+                });
     }
 
     // connect
@@ -90,16 +98,16 @@ public class Connect {
 
     // synchronous way of doing things
 
-    public static OpcUaClient createClientSync() throws InterruptedException, ExecutionException {
+    public static OpcUaClient createClientSync() throws InterruptedException, ExecutionException, UaException {
         final String endpoint = String.format("opc.tcp://%s:%s", Constants.HOST, Constants.PORT);
 
-        final EndpointDescription[] endpoints = UaTcpStackClient.getEndpoints(endpoint)
+        final List<EndpointDescription> endpoints = DiscoveryClient.getEndpoints(endpoint)
                 .get();
 
-        return new OpcUaClient(buildConfiguration(endpoints));
+        return OpcUaClient.create(buildConfiguration(endpoints));
     }
 
-    public static OpcUaClient connectSync() throws InterruptedException, ExecutionException {
+    public static OpcUaClient connectSync() throws InterruptedException, ExecutionException, UaException {
         final OpcUaClient client = createClientSync();
 
         client.connect()

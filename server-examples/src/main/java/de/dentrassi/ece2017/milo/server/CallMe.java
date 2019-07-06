@@ -13,8 +13,8 @@ package de.dentrassi.ece2017.milo.server;
 import org.eclipse.milo.opcua.sdk.server.annotations.UaInputArgument;
 import org.eclipse.milo.opcua.sdk.server.annotations.UaMethod;
 import org.eclipse.milo.opcua.sdk.server.annotations.UaOutputArgument;
-import org.eclipse.milo.opcua.sdk.server.api.ServerNodeMap;
 import org.eclipse.milo.opcua.sdk.server.nodes.UaMethodNode;
+import org.eclipse.milo.opcua.sdk.server.nodes.UaNodeContext;
 import org.eclipse.milo.opcua.sdk.server.util.AnnotationBasedInvocationHandler;
 import org.eclipse.milo.opcua.sdk.server.util.AnnotationBasedInvocationHandler.InvocationContext;
 import org.eclipse.milo.opcua.sdk.server.util.AnnotationBasedInvocationHandler.Out;
@@ -22,7 +22,6 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.LocalizedText;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.QualifiedName;
 import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UInteger;
-import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UShort;
 
 public class CallMe {
 
@@ -41,18 +40,19 @@ public class CallMe {
         }
     }
 
-    public static UaMethodNode createCallMeNode(final UShort index, final ServerNodeMap nodeMap) {
+    public static UaMethodNode createCallMeNode(final UaNodeContext context, final NodeId nodeId,
+            final QualifiedName qualifiedName) {
         final UaMethodNode method = new UaMethodNode(
-                nodeMap,
-                new NodeId(index, "call-me-al"),
-                new QualifiedName(index, "Al"),
+                context,
+                nodeId,
+                qualifiedName,
                 LocalizedText.english("Al"),
                 LocalizedText.english("Call me Al"),
                 UInteger.MIN, UInteger.MIN, true, true);
 
         try {
             final AnnotationBasedInvocationHandler handler = AnnotationBasedInvocationHandler
-                    .fromAnnotatedObject(nodeMap, new CallMe());
+                    .fromAnnotatedObject(context.getServer(), new CallMe());
             method.setInputArguments(handler.getInputArguments());
             method.setOutputArguments(handler.getOutputArguments());
             method.setInvocationHandler(handler);
