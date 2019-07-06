@@ -51,6 +51,7 @@ public class CustomNamespace extends ManagedNamespace {
                 newNodeId(1),
                 newQualifiedName("FooBarFolder"),
                 LocalizedText.english("Foo Bar Folder"));
+        context.getNodeManager().addNode(folder);
 
         // add our folder to the objects folder
 
@@ -80,6 +81,7 @@ public class CustomNamespace extends ManagedNamespace {
             variable.setDataType(Identifiers.Double);
 
             folder.addOrganizes(variable);
+            context.getNodeManager().addNode(variable);
         }
 
         // add method call
@@ -90,6 +92,7 @@ public class CustomNamespace extends ManagedNamespace {
                     newNodeId("call-me-al"),
                     newQualifiedName("Al"));
             folder.addComponent(method);
+            context.getNodeManager().addNode(method);
         }
     }
 
@@ -118,5 +121,4 @@ public class CustomNamespace extends ManagedNamespace {
     public void onMonitoringModeChanged(final List<MonitoredItem> monitoredItems) {
         this.subscriptionModel.onMonitoringModeChanged(monitoredItems);
     }
-
 }
