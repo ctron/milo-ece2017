@@ -13,7 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <milo.version>0.3.2</milo.version>
+        <milo.version>0.6.8</milo.version>
         <netty.version>4.1.68.Final</netty.version>
         <camel.version>2.22.1</camel.version>
     </properties>
